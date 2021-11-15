@@ -1,0 +1,7 @@
+total 16
+drwxrwxr-x 3 kawshikbuet17 kawshikbuet17 4096 নভেম্বর   15 20:35 dest
+drwxrwxr-x 2 kawshikbuet17 kawshikbuet17 4096 নভেম্বর   15 20:10 dir1
+-rw-rw-r-- 1 kawshikbuet17 kawshikbuet17    0 নভেম্বর   15 23:22 out.txt
+-rwxr-xr-x 1 kawshikbuet17 kawshikbuet17    0 নভেম্বর   15 22:13 sample3.txt
+-rw-rw-r-- 1 kawshikbuet17 kawshikbuet17   36 নভেম্বর   15 23:20 sample4.txt
+drwxrwxr-x 2 kawshikbuet17 kawshikbuet17 4096 নভেম্বর   15 20:35 src
