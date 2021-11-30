@@ -33,16 +33,17 @@ tree_visiting(){
 			extension="${f##*.}"
             
             case $f in
-            *.* ) exist="1";;
-            * ) exist="0";;
+            *.* ) exist="1" ;;
+            * ) exist="0" ;;
             esac
             
             if [ "$exist" = "0" ]; then
                 no_of_skip=$((no_of_skip+1))
                 mkdir -p "$HOME/Documents/new_dir/others"
-				mv "$f" "$HOME/Documents/new_dir/others/$f"
+				cp "$f" "$HOME/Documents/new_dir/others/$f"
 				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/others/desc_others.txt"
 				echo "no extension"
+
 			else
                 present="0"
                 for i in "${ARRAY[@]}"
@@ -56,7 +57,7 @@ tree_visiting(){
         
                 if [ "$present" == "0" ]; then
     				mkdir -p "$HOME/Documents/new_dir/$extension"
-    				mv "$f" "$HOME/Documents/new_dir/$extension/$f"
+    				cp "$f" "$HOME/Documents/new_dir/$extension/$f"
     				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/$extension/desc_$extension.txt"
                     echo "not skipping"
                 else
@@ -82,39 +83,54 @@ counting_files(){
 	cd ../
 }
 
+main(){
+	mkdir -p "$HOME/Documents/new_dir"
+	echo "reading file $1"
+	readFile "$1"
+	echo "reading file $1 completed"
+	no_of_skip=0
+	print_array
+
+	tree_visiting $2 1
+	echo "finished transfer"
+
+	cd "$HOME/Documents/new_dir"
+	echo "file_type, no_of_files" >> "output.csv"
+	for f1 in *
+	do
+		if [ -d "$f1" ]; then
+			counting_files $f1
+			echo "$f1,$cnt" >> "output.csv"
+		fi
+	done
+	echo "ignored, $no_of_skip" >> "output.csv"
+}
 
 echo "start"
+if [ -z "$1" ]
+then
+      echo "input file name not provided. write ./1705043.sh input.txt root_dir/"
+else
+	if [ $# -eq 1 ]; then
+		if [ -e "$1" ]; then
+			echo "$1 exists."
+			main "$1" "."
 
-mkdir -p "$HOME/Documents/new_dir"
-echo "reading file $1"
-readFile "$1"
-echo "reading file $1 completed"
-no_of_skip=0
-print_array
+		else
+			echo "Provide valid file name"
+			read filenamePrompt
+			main "$filenamePrompt" "."
+		fi
+	elif [ $# -eq 2 ]; then
+		if [ -e "$1" ]; then
+			echo "$1 exists."
+			main "$1" "$2"
 
-tree_visiting $2 1
-echo "finished transfer"
-
-cd "$HOME/Documents/new_dir"
-echo "file_type, no_of_files" >> "output.csv"
-for f1 in *
-do
-	if [ -d "$f1" ]; then
-		counting_files $f1
-		echo "$f1,$cnt" >> "output.csv"
+		else
+			echo "Provide valid file name"
+			read filenamePrompt
+			main "$filenamePrompt" "$2"
+		fi
 	fi
-done
-echo "ignored, $no_of_skip" >> "output.csv"
-# if [ -z "$1" ]
-# then
-#       echo "input file name not provided. write ./1705043.sh input.txt root_dir/"
-# else
-#     if [ -e "$1" ]; then
-#         echo "$1 exists."
-# 		main "$1" "$2"
-#     else
-#         echo "Provide valid file name"
-#         read filename
-# 		main "$filename" "$2"
-#     fi
-# fi
+fi
+ 
