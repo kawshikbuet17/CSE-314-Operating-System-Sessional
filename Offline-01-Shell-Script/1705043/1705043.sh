@@ -10,17 +10,13 @@ readFile(){
 		done < $filename
 }
 
-skipFile(){
-	filename=$1
-	present=0
+print_array(){
+	echo "printing array"
 	for i in "${ARRAY[@]}"
 	do
-		if [ -f "$filename" ]; then
-			if [ "${filename##*.}" = "$i" ]; then
-				present=1
-			fi
-		fi
+		echo "$i"
 	done
+	echo "printing array completed"
 }
 
 
@@ -35,16 +31,38 @@ tree_visiting(){
 		elif [ -f "$f" ]; then
 			echo "now in $f"
 			extension="${f##*.}"
-
-			skipFile $f
-			if [ $present = 0 ]; then
-				mkdir -p "$HOME/Documents/new_dir/$extension"
-				mv "$f" "$HOME/Documents/new_dir/$extension/$f"
-				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/$extension/$extension.txt"
-				echo "matched with extention"
+            
+            case $f in
+            *.* ) exist="1";;
+            * ) exist="0";;
+            esac
+            
+            if [ "$exist" = "0" ]; then
+                no_of_skip=$((no_of_skip+1))
+                mkdir -p "$HOME/Documents/new_dir/others"
+				mv "$f" "$HOME/Documents/new_dir/others/$f"
+				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/others/desc_others.txt"
+				echo "no extension"
 			else
-				echo "skipping"
-			fi
+                present="0"
+                for i in "${ARRAY[@]}"
+                do
+                    echo "filename:$f / extension:${f##*.} / array:$i"
+                    if [ "${f##*.}" = "$i" ]; then
+                        present="1"
+                        break
+                    fi
+                done
+        
+                if [ "$present" == "0" ]; then
+    				mkdir -p "$HOME/Documents/new_dir/$extension"
+    				mv "$f" "$HOME/Documents/new_dir/$extension/$f"
+    				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/$extension/desc_$extension.txt"
+                    echo "not skipping"
+                else
+                    echo "skipping"
+                fi
+            fi
 		fi
 	done
 	cd ../
@@ -71,26 +89,32 @@ mkdir -p "$HOME/Documents/new_dir"
 echo "reading file $1"
 readFile "$1"
 echo "reading file $1 completed"
-
-
-echo "printing array"
-for i in "${ARRAY[@]}"
-	do
-		echo "$i"
-	done
-echo "printing array completed"
-
+no_of_skip=0
+print_array
 
 tree_visiting $2 1
 echo "finished transfer"
 
 cd "$HOME/Documents/new_dir"
+echo "file_type, no_of_files" >> "output.csv"
 for f1 in *
 do
 	if [ -d "$f1" ]; then
 		counting_files $f1
-		echo "$f1,$cnt" >> "list.csv"
+		echo "$f1,$cnt" >> "output.csv"
 	fi
 done
-
-
+echo "ignored, $no_of_skip" >> "output.csv"
+# if [ -z "$1" ]
+# then
+#       echo "input file name not provided. write ./1705043.sh input.txt root_dir/"
+# else
+#     if [ -e "$1" ]; then
+#         echo "$1 exists."
+# 		main "$1" "$2"
+#     else
+#         echo "Provide valid file name"
+#         read filename
+# 		main "$filename" "$2"
+#     fi
+# fi
