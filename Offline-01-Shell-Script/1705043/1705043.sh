@@ -38,9 +38,9 @@ tree_visiting(){
 
 			skipFile $f
 			if [ $present = 0 ]; then
-				mkdir -p "$HOME/Documents/$extension"
-				mv "$f" "$HOME/Documents/$extension/$f"
-				echo "$(realpath $f)" >> "$HOME/Documents/$extension/$extension.txt"
+				mkdir -p "$HOME/Documents/new_dir/$extension"
+				mv "$f" "$HOME/Documents/new_dir/$extension/$f"
+				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/$extension/$extension.txt"
 				echo "matched with extention"
 			else
 				echo "skipping"
@@ -50,9 +50,24 @@ tree_visiting(){
 	cd ../
 }
 
+counting_files(){
+	cnt=0
+	dir=$1
+	cd "$dir"
+	for f in *
+	do
+		if [ -f "$f" ]; then
+			cnt=$(expr $cnt + 1)
+		fi
+	done
+	cnt=$(expr $cnt - 1)
+	cd ../
+}
+
+
 echo "start"
 
-
+mkdir -p "$HOME/Documents/new_dir"
 echo "reading file $1"
 readFile "$1"
 echo "reading file $1 completed"
@@ -67,4 +82,15 @@ echo "printing array completed"
 
 
 tree_visiting $2 1
-echo "finish"
+echo "finished transfer"
+
+cd "$HOME/Documents/new_dir"
+for f1 in *
+do
+	if [ -d "$f1" ]; then
+		counting_files $f1
+		echo "$f1,$cnt" >> "list.csv"
+	fi
+done
+
+
