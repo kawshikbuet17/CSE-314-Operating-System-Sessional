@@ -22,6 +22,9 @@ print_array(){
 
 tree_visiting(){
 	cd "$1"
+	if [ "$1" != "." ]; then
+        paths[$x]="$1"
+    fi
 	for f in *
 	do 
 		if [ -d "$f" ]; then
@@ -36,19 +39,35 @@ tree_visiting(){
             *.* ) exist="1" ;;
             * ) exist="0" ;;
             esac
-            
+            relpath=""
+            for elem in ${paths[@]}
+            do
+                relpath="$relpath$elem/"
+            done
             if [ "$exist" = "0" ]; then
                 no_of_skip=$((no_of_skip+1))
-                mkdir -p "$HOME/Documents/new_dir/others"
-				cp "$f" "$HOME/Documents/new_dir/others/$f"
-				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/others/desc_others.txt"
+                echo "here is relpath: $relpath"
+                
+                backdoor="../"
+                for((k = 1;k < $2;k = k + 1))
+                do
+                    backdoor="$backdoor../"
+                done
+                echo "$(pwd)"
+                echo "cd $backdoor"
+                mkdir -p "$backdoor""output_dir"
+                mkdir -p "$backdoor""output_dir/others"
+				cp "$f" "$backdoor""output_dir/others/$f"
+				echo "../../$relpath/$f" >> "$backdoor""output_dir/others/desc_others.txt"
 				echo "no extension"
+				relpath=""
+				backdoor=""
 
 			else
                 present="0"
                 for i in "${ARRAY[@]}"
                 do
-                    echo "filename:$f / extension:${f##*.} / array:$i"
+#                     echo "filename:$f / extension:${f##*.} / array:$i"
                     if [ "${f##*.}" = "$i" ]; then
                         present="1"
                         break
@@ -56,10 +75,23 @@ tree_visiting(){
                 done
         
                 if [ "$present" == "0" ]; then
-    				mkdir -p "$HOME/Documents/new_dir/$extension"
-    				cp "$f" "$HOME/Documents/new_dir/$extension/$f"
-    				echo "$(realpath $f)" >> "$HOME/Documents/new_dir/$extension/desc_$extension.txt"
+                    echo "here is relpath: $relpath"
+                    
+                    backdoor="../"
+                    for((k = 1;k < $2;k = k + 1))
+                    do
+                        backdoor="$backdoor../"
+                    done
+                    
+                    echo "$(pwd)"
+                    echo "cd $backdoor"
+                    mkdir -p "$backdoor""output_dir/"
+    				mkdir -p "$backdoor""output_dir/$extension"
+    				cp "$f" "$backdoor""output_dir/$extension/$f"
+    				echo "../../$relpath/$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
+    				relpath=""
                     echo "not skipping"
+                    backdoor=""
                 else
                     echo "skipping"
                 fi
@@ -84,7 +116,6 @@ counting_files(){
 }
 
 main(){
-	mkdir -p "$HOME/Documents/new_dir"
 	echo "reading file $1"
 	readFile "$1"
 	echo "reading file $1 completed"
@@ -93,8 +124,7 @@ main(){
 
 	tree_visiting $2 1
 	echo "finished transfer"
-
-	cd "$HOME/Documents/new_dir"
+    cd "output_dir"
 	echo "file_type, no_of_files" >> "output.csv"
 	for f1 in *
 	do
