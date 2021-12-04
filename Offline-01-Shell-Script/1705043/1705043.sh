@@ -1,13 +1,13 @@
 #!/bin/bash
 
 readFile(){
-	filename=$1
+	filename="$1"
 	n=0
 	while read line; do
 		echo "$line"
-		ARRAY[$n]=$line
+		ARRAY[$n]="$line"
 		n=$((n+1))
-		done < $filename
+		done < "$filename"
 }
 
 print_array(){
@@ -35,17 +35,17 @@ tree_visiting(){
 			echo "now in $f"
 			extension="${f##*.}"
             
-            case $f in
+            case "$f" in
             *.* ) exist="1" ;;
             * ) exist="0" ;;
             esac
             relpath=""
-            for elem in ${paths[@]}
+            for elem in "${paths[@]}"
             do
                 relpath="$relpath$elem/"
             done
             if [ "$exist" = "0" ]; then
-                no_of_skip=$((no_of_skip+1))
+                
                 echo "here is relpath: $relpath"
                 
                 backdoor="../"
@@ -94,6 +94,7 @@ tree_visiting(){
                     backdoor=""
                 else
                     echo "skipping"
+					no_of_skip=$((no_of_skip+1))
                 fi
             fi
 		fi
@@ -103,7 +104,7 @@ tree_visiting(){
 
 counting_files(){
 	cnt=0
-	dir=$1
+	dir="$1"
 	cd "$dir"
 	for f in *
 	do
@@ -122,18 +123,18 @@ main(){
 	no_of_skip=0
 	print_array
 
-	tree_visiting $2 1
+	tree_visiting "$2" 1
 	echo "finished transfer"
     cd "output_dir"
 	echo "file_type, no_of_files" >> "output.csv"
 	for f1 in *
 	do
 		if [ -d "$f1" ]; then
-			counting_files $f1
+			counting_files "$f1"
 			echo "$f1,$cnt" >> "output.csv"
 		fi
 	done
-	echo "ignored, $no_of_skip" >> "output.csv"
+	echo "ignored,$no_of_skip" >> "output.csv"
 }
 
 echo "start"
