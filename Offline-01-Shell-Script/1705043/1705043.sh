@@ -60,7 +60,7 @@ tree_visiting(){
 
 				if [ ! -f "$backdoor""output_dir/others/$f" ]; then
 					cp "$f" "$backdoor""output_dir/others/$f"
-					echo "../../$relpath/$f" >> "$backdoor""output_dir/others/desc_others.txt"
+					echo "$relpath$f" >> "$backdoor""output_dir/others/desc_others.txt"
 					echo "no extension"
 					relpath=""
 					backdoor=""
@@ -101,7 +101,7 @@ tree_visiting(){
 
 					if [ ! -f "$backdoor""output_dir/$extension/$f" ]; then
 						cp "$f" "$backdoor""output_dir/$extension/$f"
-						echo "../../$relpath/$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
+						echo "$relpath$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
 						relpath=""
 						echo "not skipping"
 						backdoor=""
@@ -145,7 +145,7 @@ main(){
 	tree_visiting "$2" 1
 	echo "finished transfer"
     cd "output_dir"
-	echo "file_type, no_of_files" >> "output.csv"
+	echo "file_type,no_of_files" >> "output.csv"
 	for f1 in *
 	do
 		if [ -d "$f1" ]; then
@@ -154,6 +154,8 @@ main(){
 		fi
 	done
 	echo "ignored,$no_of_skip" >> "output.csv"
+	mv "output.csv" "../output.csv"
+	echo "output.csv done"
 }
 
 echo "start"
