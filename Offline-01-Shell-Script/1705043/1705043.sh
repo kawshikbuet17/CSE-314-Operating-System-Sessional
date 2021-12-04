@@ -40,10 +40,11 @@ tree_visiting(){
             * ) exist="0" ;;
             esac
             relpath=""
-            for elem in "${paths[@]}"
-            do
-                relpath="$relpath$elem/"
-            done
+			relpath="${PWD##*$working_directory}"
+            # for elem in "${paths[@]}"
+            # do
+            #     relpath="$relpath$elem/"
+            # done
             if [ "$exist" = "0" ]; then
                 
                 echo "here is relpath: $relpath"
@@ -60,7 +61,7 @@ tree_visiting(){
 
 				if [ ! -f "$backdoor""output_dir/others/$f" ]; then
 					cp "$f" "$backdoor""output_dir/others/$f"
-					echo "$relpath$f" >> "$backdoor""output_dir/others/desc_others.txt"
+					echo "$working_directory$relpath/$f" >> "$backdoor""output_dir/others/desc_others.txt"
 					echo "no extension"
 					relpath=""
 					backdoor=""
@@ -101,7 +102,7 @@ tree_visiting(){
 
 					if [ ! -f "$backdoor""output_dir/$extension/$f" ]; then
 						cp "$f" "$backdoor""output_dir/$extension/$f"
-						echo "$relpath$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
+						echo "$working_directory$relpath/$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
 						relpath=""
 						echo "not skipping"
 						backdoor=""
@@ -141,7 +142,7 @@ main(){
 	echo "reading file $1 completed"
 	no_of_skip=0
 	print_array
-
+	working_directory="$2"
 	tree_visiting "$2" 1
 	echo "finished transfer"
     cd "output_dir"
@@ -166,12 +167,12 @@ else
 	if [ $# -eq 1 ]; then
 		if [ -e "$1" ]; then
 			echo "$1 exists."
-			main "$1" "."
+			main "$1" "${PWD##*/}"
 
 		else
 			echo "Provide valid file name"
 			read filenamePrompt
-			main "$filenamePrompt" "."
+			main "$filenamePrompt" "${PWD##*/}"
 		fi
 	elif [ $# -eq 2 ]; then
 		if [ -e "$1" ]; then
