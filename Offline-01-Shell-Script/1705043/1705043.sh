@@ -57,11 +57,18 @@ tree_visiting(){
                 echo "cd $backdoor"
                 mkdir -p "$backdoor""output_dir"
                 mkdir -p "$backdoor""output_dir/others"
-				cp "$f" "$backdoor""output_dir/others/$f"
-				echo "../../$relpath/$f" >> "$backdoor""output_dir/others/desc_others.txt"
-				echo "no extension"
-				relpath=""
-				backdoor=""
+
+				if [ ! -f "$backdoor""output_dir/others/$f" ]; then
+					cp "$f" "$backdoor""output_dir/others/$f"
+					echo "../../$relpath/$f" >> "$backdoor""output_dir/others/desc_others.txt"
+					echo "no extension"
+					relpath=""
+					backdoor=""
+				else
+					echo "exists already. so not copying"
+					relpath=""
+					backdoor=""
+				fi
 
 			else
                 present="0"
@@ -85,13 +92,25 @@ tree_visiting(){
                     
                     echo "$(pwd)"
                     echo "cd $backdoor"
+
+					
+
+
                     mkdir -p "$backdoor""output_dir/"
     				mkdir -p "$backdoor""output_dir/$extension"
-    				cp "$f" "$backdoor""output_dir/$extension/$f"
-    				echo "../../$relpath/$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
-    				relpath=""
-                    echo "not skipping"
-                    backdoor=""
+
+					if [ ! -f "$backdoor""output_dir/$extension/$f" ]; then
+						cp "$f" "$backdoor""output_dir/$extension/$f"
+						echo "../../$relpath/$f" >> "$backdoor""output_dir/$extension/desc_$extension.txt"
+						relpath=""
+						echo "not skipping"
+						backdoor=""
+					else
+						relpath=""
+						echo "exists already. so not copying"
+						backdoor=""
+					fi
+    				
                 else
                     echo "skipping"
 					no_of_skip=$((no_of_skip+1))
