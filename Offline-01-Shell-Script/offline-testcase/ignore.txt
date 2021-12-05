@@ -1,0 +1,9 @@
+jpg
+mp3
+png
+zip
+exe
+out
+sh
+html
+
