@@ -10,6 +10,7 @@ using namespace std;
 //semaphore to control sleep and wake up
 sem_t empty;
 sem_t full;
+pthread_mutex_t mtx;
 queue<int> q;
 
 
@@ -21,11 +22,15 @@ void * ProducerFunc(void * arg)
 	for(i=1;i<=10;i++)
 	{
 		
-			
+		sem_wait(&empty);
 		sleep(1);
 		
+		pthread_mutex_lock(&mtx);
 		q.push(i);
 		printf("producer produced item %d\n",i);
+		pthread_mutex_unlock(&mtx);
+		sem_post(&full);
+		
 		
 		
 	
@@ -40,13 +45,17 @@ void * ConsumerFunc(void * arg)
 	for(i=1;i<=10;i++)
 	{	
 		
- 		
+ 		sem_wait(&full);
 		sleep(1);
 		
-
+		pthread_mutex_lock(&mtx);
 		int item = q.front();
+		
 		q.pop();
 		printf("consumer consumed item %d\n",item);	
+		pthread_mutex_unlock(&mtx);
+		sem_post(&empty);
+		
 
 			
 		
@@ -63,6 +72,9 @@ int main(void)
 	pthread_t thread2;
 	
 	//init_semaphore();
+	sem_init(&empty,0,5);
+	sem_init(&full, 0,0);
+	pthread_mutex_init(&mtx,NULL);
 	
 	char * message1 = "i am producer";
 	char * message2 = "i am consumer";	
