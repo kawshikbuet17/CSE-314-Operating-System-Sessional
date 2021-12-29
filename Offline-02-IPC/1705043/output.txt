@@ -1,0 +1,46 @@
+1023
+4567
+i am producer
+i am consumerCreating SecurityFunc 0
+
+Creating SecurityFunc 1
+i am kiosk
+i am security belti am security belt
+
+Creating SecurityFunc 2
+Creating SecurityFunc 3
+Creating SecurityFunc 4
+i am security belti am security belt
+Creating SecurityFunc 5
+
+Creating SecurityFunc 6
+i am security belt
+i am security belt
+Creating SecurityFunc 7
+i am security belt
+Creating SecurityFunc 8
+Creating SecurityFunc 9
+i am security belti am security belt
+i am security belt
+
+producer produced item 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+Entered Kiosk Passenger 1
+producer produced item 2
+consumer consumed item 1
+consumer consumed item 2
+producer produced item 3
+consumer consumed item 3
+producer produced item 4
+consumer consumed item 4
+producer produced item 5
+consumer consumed item 5
+producer produced item 6
