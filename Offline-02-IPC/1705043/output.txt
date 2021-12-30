@@ -1,122 +1,128 @@
 3 2 5 
 8 10 12 14
-Passenger 1 in Kiosk at time 3
-Passenger 2 in Kiosk at time 9
-Passenger 3 in Kiosk at time 11
-Passenger 4 in Kiosk at time 13
-Passenger 1 is sent to security belt 2 at time 19
-Passenger 5 in Kiosk at time 23
-Passenger 6 in Kiosk at time 33
-Passenger 2 is sent to security belt 2 at time 35
-Passenger 7 in Kiosk at time 41
-Passenger 8 in Kiosk at time 45
-Passenger 9 in Kiosk at time 49
-Passenger 3 is sent to security belt 0 at time 51
-Passenger 10 in Kiosk at time 51
-Passenger 11 in Kiosk at time 55
-Passenger 12 in Kiosk at time 61
-Passenger 4 is sent to security belt 1 at time 67
-Security Belt 1 received passenger 4 at time 67
-Passenger 13 in Kiosk at time 70
-Passenger 14 in Kiosk at time 72
-Passenger 15 in Kiosk at time 72
-Passenger 5 is sent to security belt 2 at time 75
-Passenger 4 is sent to boarding at time 77
-Passenger 4 received at boarding at time 77
-Passenger 16 in Kiosk at time 77
-Passenger 17 in Kiosk at time 80
-Passenger 6 is sent to security belt 0 at time 83
-Passenger 18 in Kiosk at time 84
-Passenger 19 in Kiosk at time 87
-Passenger 4 ready to go at time 89
-Passenger 7 is sent to security belt 2 at time 93
-Passenger 20 in Kiosk at time 93
-Passenger 8 is sent to security belt 0 at time 109
-Passenger 9 is sent to security belt 2 at time 125
-Security Belt 0 received passenger 3 at time 125
-Passenger 11 is sent to security belt 0 at time 133
-Security Belt 2 received passenger 1 at time 133
-Security Belt 2 received passenger 2 at time 133
-Security Belt 2 received passenger 5 at time 133
-Security Belt 2 received passenger 7 at time 133
-Security Belt 2 received passenger 9 at time 133
-Passenger 3 is sent to boarding at time 135
-Passenger 3 received at boarding at time 135
-Passenger 14 is sent to security belt 0 at time 141
-Passenger 3 ready to go at time 147
-Passenger 13 is sent to security belt 0 at time 149
-Passenger 1 is sent to boarding at time 157
-Passenger 16 is sent to security belt 1 at time 157
-Security Belt 1 received passenger 16 at time 157
-Passenger 10 is sent to security belt 2 at time 165
-Passenger 5 is sent to boarding at time 167
-Passenger 18 is sent to security belt 1 at time 173
-Passenger 9 is sent to boarding at time 177
-Passenger 15 is sent to security belt 2 at time 181
-Security Belt 0 received passenger 6 at time 181
-Security Belt 0 received passenger 8 at time 181
-Security Belt 0 received passenger 11 at time 181
-Security Belt 0 received passenger 14 at time 181
-Security Belt 0 received passenger 13 at time 181
-Passenger 7 is sent to boarding at time 187
-Passenger 1 received at boarding at time 187
-Passenger 12 is sent to security belt 2 at time 189
-Security Belt 2 received passenger 10 at time 189
-Security Belt 2 received passenger 15 at time 189
-Security Belt 2 received passenger 12 at time 189
-Passenger 19 is sent to security belt 2 at time 197
-Passenger 1 ready to go at time 199
-Passenger 5 received at boarding at time 199
-Passenger 17 is sent to security belt 2 at time 205
-Security Belt 1 received passenger 18 at time 205
-Passenger 5 ready to go at time 211
-Passenger 9 received at boarding at time 211
-Passenger 20 is sent to security belt 2 at time 213
-Security Belt 2 received passenger 19 at time 213
-Security Belt 2 received passenger 17 at time 213
-Security Belt 2 received passenger 20 at time 213
-Passenger 9 ready to go at time 223
-Passenger 7 received at boarding at time 223
-Passenger 7 ready to go at time 235
-Passenger 11 is sent to boarding at time 245
-Passenger 8 is sent to boarding at time 255
-Passenger 14 is sent to boarding at time 265
-Passenger 13 is sent to boarding at time 275
-Passenger 15 is sent to boarding at time 285
-Passenger 10 is sent to boarding at time 295
-Passenger 12 is sent to boarding at time 305
-Passenger 2 is sent to boarding at time 315
-Passenger 18 is sent to boarding at time 325
-Passenger 16 is sent to boarding at time 335
-Passenger 19 is sent to boarding at time 345
-Passenger 17 is sent to boarding at time 355
-Passenger 20 is sent to boarding at time 365
-Passenger 6 is sent to boarding at time 375
-Passenger 11 received at boarding at time 375
-Passenger 11 ready to go at time 387
-Passenger 8 received at boarding at time 387
-Passenger 8 ready to go at time 399
-Passenger 14 received at boarding at time 399
-Passenger 14 ready to go at time 411
-Passenger 13 received at boarding at time 411
-Passenger 13 ready to go at time 423
-Passenger 15 received at boarding at time 423
-Passenger 15 ready to go at time 435
-Passenger 10 received at boarding at time 435
-Passenger 10 ready to go at time 447
-Passenger 12 received at boarding at time 447
-Passenger 12 ready to go at time 459
-Passenger 2 received at boarding at time 459
-Passenger 2 ready to go at time 471
-Passenger 18 received at boarding at time 471
-Passenger 18 ready to go at time 483
-Passenger 16 received at boarding at time 483
-Passenger 16 ready to go at time 495
-Passenger 19 received at boarding at time 495
-Passenger 19 ready to go at time 507
-Passenger 17 received at boarding at time 507
-Passenger 17 ready to go at time 519
-Passenger 20 received at boarding at time 519
-Passenger 20 ready to go at time 531
-Passenger 6 received at boarding at time 531
-Passenger 6 ready to go at time 543
+Passenger 1 has arrived at airport at time 1
+Passenger 1 has started self check at kiosk 0 at time 1
+Passenger 2 has arrived at airport at time 4
+Passenger 2 has started self check at kiosk 0 at time 4
+Passenger 3 has arrived at airport at time 5
+Passenger 3 has started self check at kiosk 0 at time 5
+Passenger 4 has arrived at airport at time 6
+Passenger 4 has started self check at kiosk 0 at time 6
+Passenger 1 has finished check in at time 9
+Passenger 1 has started waiting for security check in belt 0
+Passenger 5 has arrived at airport at time 11
+Passenger 5 has started self check at kiosk 0 at time 11
+Passenger 2 has finished check in at time 13
+Passenger 2 has started waiting for security check in belt 1
+Passenger 3 has finished check in at time 14
+Passenger 3 has started waiting for security check in belt 2
+Passenger 6 has arrived at airport at time 17
+Passenger 6 has started self check at kiosk 0 at time 17
+Passenger 1 has crossed the security check at time 20
+Passenger 1 has started waiting to be boarded at time 20
+Passenger 5 has finished check in at time 20
+Passenger 5 has started waiting for security check in belt 2
+Passenger 4 [VIP] is sent to boarding at time 21
+Passenger 7 has arrived at airport at time 21
+Passenger 7 has started self check at kiosk 0 at time 21
+Passenger 8 has arrived at airport at time 23
+Passenger 8 has started self check at kiosk 0 at time 23
+Passenger 6 has finished check in at time 25
+Passenger 9 has arrived at airport at time Passenger 256
+ has started waiting for security check in belt 0
+Passenger 9 has started self check at kiosk 0 at time 25
+Passenger 10 has arrived at airport at time 26
+Passenger 10 has started self check at kiosk 0 at time 26
+Passenger 11 has arrived at airport at time 28
+Passenger 11 has started self check at kiosk 0 at time 28
+Passenger 7 has finished check in at time 29
+Passenger 7 has started waiting for security check in belt 2
+Passenger 12 has arrived at airport at time 31
+Passenger 12 has started self check at kiosk 0 at time 31
+Passenger 1  has boarded the plane at time 32
+Passenger 4 has started waiting to be boarded at time 32
+Passenger 9 has finished check in at time 33
+Passenger 9 has started waiting for security check in belt 0
+Passenger 10 has finished check in at time 34
+Passenger 10 has started waiting for security check in belt 1
+Passenger 11 has finished check in at time 36
+Passenger 11 has started waiting for security check in belt 0
+Passenger 8 [VIP] is sent to boarding at time 37
+Passenger 13 has arrived at airport at time 37
+Passenger 13 has started self check at kiosk 0 at time 37
+Passenger 14 has arrived at airport at time 39
+Passenger 14 has started self check at kiosk 0 at time 39
+Passenger 15 has arrived at airport at time 39
+Passenger 15 has started self check at kiosk 0 at time 39
+Passenger 4  has boarded the plane at time 44
+Passenger 8 has started waiting to be boarded at time 44
+Passenger 16 has arrived at airport at time 44
+Passenger 16 has started self check at kiosk 0 at time 44
+Passenger 12 [VIP] is sent to boarding at time 45
+Passenger 13 has finished check in at time 45
+Passenger 13 has started waiting for security check in belt 2
+Passenger 14 has finished check in at time 47
+Passenger 14 has started waiting for security check in belt 1
+Passenger 17 has arrived at airport at time Passenger 15 has finished check in at time 47
+47
+Passenger 15 has started waiting for security check in belt 1
+Passenger 17 has started self check at kiosk 0 at time 47
+Passenger 18 has arrived at airport at time 51
+Passenger 18 has started self check at kiosk 0 at time 51
+Passenger 19 has arrived at airport at time 54
+Passenger 19 has started self check at kiosk 0 at time 54
+Passenger 17 has finished check in at time 55
+Passenger 17 has started waiting for security check in belt 2
+Passenger 8  has boarded the plane at time 56
+Passenger 12 has started waiting to be boarded at time 56
+Passenger 16 [VIP] is sent to boarding at time 58
+Passenger 20 has arrived at airport at time 58
+Passenger 20 has started self check at kiosk 0 at time 58
+Passenger 18 has finished check in at time 59
+Passenger 18 has started waiting for security check in belt 0
+Passenger 19 has finished check in at time 62
+Passenger 19 has started waiting for security check in belt 0
+Passenger 12  has boarded the plane at time 68
+Passenger 16 has started waiting to be boarded at time 68
+Passenger 20 [VIP] is sent to boarding at time 72
+Passenger 16  has boarded the plane at time 80
+Passenger 20 [Lost] at time 80
+Passenger 7 has crossed the security check at time 80
+Passenger 9 has crossed the security check at time 80
+Passenger 3 has crossed the security check at time 80
+Passenger 10 has crossed the security check at time 80
+Passenger 11 has crossed the security check at time 80
+Passenger 13 has crossed the security check at time 80
+Passenger 5 has crossed the security check at time 80
+Passenger 14 has crossed the security check at time 80
+Passenger 15 has crossed the security check at time 80
+Passenger 17 has crossed the security check at time 80
+Passenger 2 has crossed the security check at time 80
+Passenger 18 has crossed the security check at time 80
+Passenger 19 has crossed the security check at time 80
+Passenger 6 has crossed the security check at time 80
+Passenger 7 has started waiting to be boarded at time 80
+Passenger 7  has boarded the plane at time 92
+Passenger 9 has started waiting to be boarded at time 92
+Passenger 9  has boarded the plane at time 104
+Passenger 3 has started waiting to be boarded at time 104
+Passenger 3  has boarded the plane at time 116
+Passenger 10 [Lost] at time 116
+Passenger 11 has started waiting to be boarded at time 116
+Passenger 11  has boarded the plane at time 128
+Passenger 13 has started waiting to be boarded at time 128
+Passenger 13  has boarded the plane at time 140
+Passenger 5 [Lost] at time 140
+Passenger 14 has started waiting to be boarded at time 140
+Passenger 14  has boarded the plane at time 152
+Passenger 15 [Lost] at time 152
+Passenger 17 has started waiting to be boarded at time 152
+Passenger 17  has boarded the plane at time 164
+Passenger 2 has started waiting to be boarded at time 164
+Passenger 2  has boarded the plane at time 176
+Passenger 18 has started waiting to be boarded at time 176
+Passenger 18  has boarded the plane at time 188
+Passenger 19 has started waiting to be boarded at time 188
+Passenger 19  has boarded the plane at time 200
+Passenger 6 has started waiting to be boarded at time 200
+Passenger 6  has boarded the plane at time 212
