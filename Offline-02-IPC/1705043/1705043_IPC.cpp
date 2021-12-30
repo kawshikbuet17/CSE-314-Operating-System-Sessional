@@ -53,28 +53,46 @@ void * EnterPassenger(void * arg){
 	}
 }
 
+void * KioskProduce(void * arg){
+	int item = ((struct args*)arg)->num;
+	int r = rand()%M;
+	sem_wait(&securityBeltEmpty[r]);
+	pthread_mutex_lock(&mtxKioskSecurity);
+	securityQueue[r].push(item);
+	sleep(w);
+	cout<<"Passenger "<<item<<" is sent to security belt "<<r<<" at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtxKioskSecurity);
+	sem_post(&securityBeltFull[r]);
+}
+
 void * KioskFunc(void * arg){
 	while(true){
 		sem_wait(&kioskFull);
-		// sleep(1);
 		pthread_mutex_lock(&mtxEntryKiosk);
 		if(!passenger.empty()){
 			int item = passenger.front();
 			passenger.pop();
 			cout<<"Passenger "<<item<<" in Kiosk at time "<<GetTime()<<endl;
-			int r = rand()%M;
-			sem_wait(&securityBeltEmpty[r]);
-			// sleep(1);
-			pthread_mutex_lock(&mtxKioskSecurity);
-			securityQueue[r].push(item);
-			sleep(w);
-			cout<<"Passenger "<<item<<" is sent to security belt "<<r<<" at time "<<GetTime()<<endl;
-			pthread_mutex_unlock(&mtxKioskSecurity);
-			sem_post(&securityBeltFull[r]);
+			struct args* a = (struct args *)malloc(sizeof(struct args));
+			a->name="KioskProduce";
+			a->num=item;
+			pthread_t thread;
+			pthread_create(&thread, NULL, KioskProduce,(void*)a);
 		}
 		pthread_mutex_unlock(&mtxEntryKiosk);
 		sem_post(&kioskEmpty);
 	}
+}
+
+void * SecurityProduce(void * arg){
+	int item = ((struct args*)arg)->num;
+	// sem_wait(&boardingEmpty);
+	pthread_mutex_lock(&mtxSecurityBoarding);
+	boardingQueue.push(item);
+	sleep(x);
+	cout<<"Passenger "<<item<<" is sent to boarding at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtxSecurityBoarding);
+	// sem_post(&boardingFull);
 }
 
 void * SecurityFunc(void * arg){
@@ -82,23 +100,16 @@ void * SecurityFunc(void * arg){
 	int num = ((struct args*)arg)->num;
 	while(true){
 		sem_wait(&securityBeltFull[num]);
-		// sleep(1);
 		pthread_mutex_lock(&mtxKioskSecurity);
 		if(!securityQueue[num].empty()){
 			int item = securityQueue[num].front();
 			securityQueue[num].pop();
-			
 			cout<<"Security Belt "<<num<<" received passenger "<<item<<" at time "<<GetTime()<<endl;
-
-			// sem_wait(&boardingEmpty);
-			// sleep(1);
-			pthread_mutex_lock(&mtxSecurityBoarding);
-			boardingQueue.push(item);
-			
-			sleep(x);
-			cout<<"Passenger "<<item<<" is sent to boarding at time "<<GetTime()<<endl;
-			pthread_mutex_unlock(&mtxSecurityBoarding);
-			// sem_post(&boardingFull);
+			struct args* a = (struct args *)malloc(sizeof(struct args));
+			a->name="SecurityProduce";
+			a->num=item;
+			pthread_t thread;
+			pthread_create(&thread, NULL, SecurityProduce,(void*)a);
 		}
 		pthread_mutex_unlock(&mtxKioskSecurity);
 		sem_post(&securityBeltEmpty[num]);
@@ -153,6 +164,8 @@ int main(void)
 	
 	sem_init(&kioskEmpty, 0, M);
 	sem_init(&kioskFull, 0, 0);
+	// sem_init(&boardingEmpty, 0, M);
+	// sem_init(&boardingFull, 0, 0);
 	pthread_mutex_init(&mtxEntryKiosk,NULL);
 	pthread_mutex_init(&mtxKioskSecurity,NULL);
 	pthread_mutex_init(&mtxSecurityBoarding,NULL);

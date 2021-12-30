@@ -1,122 +1,122 @@
 3 2 5 
 8 10 12 14
 Passenger 1 in Kiosk at time 3
+Passenger 2 in Kiosk at time 9
+Passenger 3 in Kiosk at time 11
+Passenger 4 in Kiosk at time 13
 Passenger 1 is sent to security belt 2 at time 19
-Security Belt 2 received passenger 1 at time 19
-Passenger 2 in Kiosk at time 19
-Passenger 1 is sent to boarding at time 29
-Passenger 1 received at boarding at time 29
-Passenger 2 is sent to security belt 2 at time 37
-Passenger 3 in Kiosk at time 37
-Passenger 1 ready to go at time 41
-Passenger 3 is sent to security belt 0 at time 49
-Security Belt 0 received passenger 3 at time 49
-Passenger 4 in Kiosk at time 49
-Passenger 3 is sent to boarding at time 59
-Passenger 3 received at boarding at time 59
-Passenger 4 is sent to security belt 0 at time 67
-Security Belt 0 received passenger 4 at time 67
-Passenger 5 in Kiosk at time 67
-Passenger 3 ready to go at time 71
-Passenger 4 is sent to boarding at time 81
-Security Belt 2 received passenger 2 at time 81
-Passenger 2 is sent to boarding at time 91
-Passenger 4 received at boarding at time 91
-Passenger 5 is sent to security belt 2 at time 99
-Security Belt 2 received passenger 5 at time 99
-Passenger 6 in Kiosk at time 99
-Passenger 4 ready to go at time 103
-Passenger 2 received at boarding at time 103
-Passenger 2 ready to go at time 115
-Passenger 5 is sent to boarding at time 125
-Passenger 5 received at boarding at time 125
-Passenger 6 is sent to security belt 2 at time 133
-Security Belt 2 received passenger 6 at time 133
-Passenger 7 in Kiosk at time 133
-Passenger 5 ready to go at time 137
-Passenger 6 is sent to boarding at time 147
-Passenger 6 received at boarding at time 147
-Passenger 7 is sent to security belt 2 at time 155
-Passenger 8 in Kiosk at time Security Belt 155
-2 received passenger 7 at time 155
-Passenger 6 ready to go at time 159
-Passenger 7 is sent to boarding at time 169
-Passenger 7 received at boarding at time 169
-Passenger 8 is sent to security belt 1 at time 177
-Security Belt 1 received passenger 8 at time 177
-Passenger 9 in Kiosk at time 177
-Passenger 7 ready to go at time 181
-Passenger 8 is sent to boarding at time 191
-Passenger 8 received at boarding at time 191
-Passenger 9 is sent to security belt 1 at time 199
-Security Belt 1 received passenger 9 at time 199
-Passenger 10 in Kiosk at time 199
-Passenger 8 ready to go at time 203
-Passenger 9 is sent to boarding at time 213
-Passenger 9 received at boarding at time 213
-Passenger 10 is sent to security belt 0 at time 221
-Security Belt 0 received passenger 10 at time 221
-Passenger 11 in Kiosk at time 221
-Passenger 9 ready to go at time 225
-Passenger 10 is sent to boarding at time 235
-Passenger 10 received at boarding at time 235
-Passenger 11 is sent to security belt 0 at time 243
-Security Belt 0 received passenger 11 at time 243
-Passenger 12 in Kiosk at time 243
-Passenger 10 ready to go at time 247
-Passenger 11 is sent to boarding at time 257
-Passenger 11 received at boarding at time 257
-Passenger 12 is sent to security belt 0 at time 265
-Security Belt 0 received passenger 12 at time 265
-Passenger 13 in Kiosk at time 265
-Passenger 11 ready to go at time 269
-Passenger 12 is sent to boarding at time 279
-Passenger 12 received at boarding at time 279
-Passenger 13 is sent to security belt 1 at time 287
-Security Belt 1 received passenger 13 at time 287
-Passenger 14 in Kiosk at time 287
-Passenger 12 ready to go at time 291
-Passenger 13 is sent to boarding at time 301
-Passenger 13 received at boarding at time 301
-Passenger 14 is sent to security belt 1 at time 309
-Security Belt 1 received passenger 14 at time 309
-Passenger 15 in Kiosk at time 309
-Passenger 13 ready to go at time 313
-Passenger 14 is sent to boarding at time 323
-Passenger 14 received at boarding at time 323
-Passenger 15 is sent to security belt 1 at time 331
-Security Belt 1 received passenger 15 at time 331
-Passenger 16 in Kiosk at time 331
-Passenger 14 ready to go at time 335
-Passenger 15 is sent to boarding at time 345
-Passenger 15 received at boarding at time 345
-Passenger 16 is sent to security belt 1 at time 353
-Security Belt 1 received passenger 16 at time 353
-Passenger 17 in Kiosk at time 353
-Passenger 15 ready to go at time 357
-Passenger 16 is sent to boarding at time 367
-Passenger 16 received at boarding at time 367
-Passenger 17 is sent to security belt 0 at time 375
-Security Belt 0 received passenger 17 at time 375
-Passenger 18 in Kiosk at time 375
-Passenger 16 ready to go at time 379
-Passenger 17 is sent to boarding at time 389
-Passenger 17 received at boarding at time 389
-Passenger 18 is sent to security belt 0 at time 397
-Security Belt 0 received passenger 18 at time 397
-Passenger 19 in Kiosk at time 397
-Passenger 17 ready to go at time 401
-Passenger 18 is sent to boarding at time 411
-Passenger 18 received at boarding at time 411
-Passenger 19 is sent to security belt 1 at time 419
-Security Belt 1 received passenger 19 at time 419
-Passenger 20 in Kiosk at time 419
-Passenger 18 ready to go at time 423
-Passenger 19 is sent to boarding at time 433
-Passenger 19 received at boarding at time 433
-Passenger 20 is sent to security belt 0 at time 441
-Security Belt 0 received passenger 20 at time 441
-Passenger 19 ready to go at time 445
-Passenger 20 is sent to boarding at time 455
-Passenger 20 received at boarding at time 455
-Passenger 20 ready to go at time 467
+Passenger 5 in Kiosk at time 23
+Passenger 6 in Kiosk at time 33
+Passenger 2 is sent to security belt 2 at time 35
+Passenger 7 in Kiosk at time 41
+Passenger 8 in Kiosk at time 45
+Passenger 9 in Kiosk at time 49
+Passenger 3 is sent to security belt 0 at time 51
+Passenger 10 in Kiosk at time 51
+Passenger 11 in Kiosk at time 55
+Passenger 12 in Kiosk at time 61
+Passenger 4 is sent to security belt 1 at time 67
+Security Belt 1 received passenger 4 at time 67
+Passenger 13 in Kiosk at time 70
+Passenger 14 in Kiosk at time 72
+Passenger 15 in Kiosk at time 72
+Passenger 5 is sent to security belt 2 at time 75
+Passenger 4 is sent to boarding at time 77
+Passenger 4 received at boarding at time 77
+Passenger 16 in Kiosk at time 77
+Passenger 17 in Kiosk at time 80
+Passenger 6 is sent to security belt 0 at time 83
+Passenger 18 in Kiosk at time 84
+Passenger 19 in Kiosk at time 87
+Passenger 4 ready to go at time 89
+Passenger 7 is sent to security belt 2 at time 93
+Passenger 20 in Kiosk at time 93
+Passenger 8 is sent to security belt 0 at time 109
+Passenger 9 is sent to security belt 2 at time 125
+Security Belt 0 received passenger 3 at time 125
+Passenger 11 is sent to security belt 0 at time 133
+Security Belt 2 received passenger 1 at time 133
+Security Belt 2 received passenger 2 at time 133
+Security Belt 2 received passenger 5 at time 133
+Security Belt 2 received passenger 7 at time 133
+Security Belt 2 received passenger 9 at time 133
+Passenger 3 is sent to boarding at time 135
+Passenger 3 received at boarding at time 135
+Passenger 14 is sent to security belt 0 at time 141
+Passenger 3 ready to go at time 147
+Passenger 13 is sent to security belt 0 at time 149
+Passenger 1 is sent to boarding at time 157
+Passenger 16 is sent to security belt 1 at time 157
+Security Belt 1 received passenger 16 at time 157
+Passenger 10 is sent to security belt 2 at time 165
+Passenger 5 is sent to boarding at time 167
+Passenger 18 is sent to security belt 1 at time 173
+Passenger 9 is sent to boarding at time 177
+Passenger 15 is sent to security belt 2 at time 181
+Security Belt 0 received passenger 6 at time 181
+Security Belt 0 received passenger 8 at time 181
+Security Belt 0 received passenger 11 at time 181
+Security Belt 0 received passenger 14 at time 181
+Security Belt 0 received passenger 13 at time 181
+Passenger 7 is sent to boarding at time 187
+Passenger 1 received at boarding at time 187
+Passenger 12 is sent to security belt 2 at time 189
+Security Belt 2 received passenger 10 at time 189
+Security Belt 2 received passenger 15 at time 189
+Security Belt 2 received passenger 12 at time 189
+Passenger 19 is sent to security belt 2 at time 197
+Passenger 1 ready to go at time 199
+Passenger 5 received at boarding at time 199
+Passenger 17 is sent to security belt 2 at time 205
+Security Belt 1 received passenger 18 at time 205
+Passenger 5 ready to go at time 211
+Passenger 9 received at boarding at time 211
+Passenger 20 is sent to security belt 2 at time 213
+Security Belt 2 received passenger 19 at time 213
+Security Belt 2 received passenger 17 at time 213
+Security Belt 2 received passenger 20 at time 213
+Passenger 9 ready to go at time 223
+Passenger 7 received at boarding at time 223
+Passenger 7 ready to go at time 235
+Passenger 11 is sent to boarding at time 245
+Passenger 8 is sent to boarding at time 255
+Passenger 14 is sent to boarding at time 265
+Passenger 13 is sent to boarding at time 275
+Passenger 15 is sent to boarding at time 285
+Passenger 10 is sent to boarding at time 295
+Passenger 12 is sent to boarding at time 305
+Passenger 2 is sent to boarding at time 315
+Passenger 18 is sent to boarding at time 325
+Passenger 16 is sent to boarding at time 335
+Passenger 19 is sent to boarding at time 345
+Passenger 17 is sent to boarding at time 355
+Passenger 20 is sent to boarding at time 365
+Passenger 6 is sent to boarding at time 375
+Passenger 11 received at boarding at time 375
+Passenger 11 ready to go at time 387
+Passenger 8 received at boarding at time 387
+Passenger 8 ready to go at time 399
+Passenger 14 received at boarding at time 399
+Passenger 14 ready to go at time 411
+Passenger 13 received at boarding at time 411
+Passenger 13 ready to go at time 423
+Passenger 15 received at boarding at time 423
+Passenger 15 ready to go at time 435
+Passenger 10 received at boarding at time 435
+Passenger 10 ready to go at time 447
+Passenger 12 received at boarding at time 447
+Passenger 12 ready to go at time 459
+Passenger 2 received at boarding at time 459
+Passenger 2 ready to go at time 471
+Passenger 18 received at boarding at time 471
+Passenger 18 ready to go at time 483
+Passenger 16 received at boarding at time 483
+Passenger 16 ready to go at time 495
+Passenger 19 received at boarding at time 495
+Passenger 19 ready to go at time 507
+Passenger 17 received at boarding at time 507
+Passenger 17 ready to go at time 519
+Passenger 20 received at boarding at time 519
+Passenger 20 ready to go at time 531
+Passenger 6 received at boarding at time 531
+Passenger 6 ready to go at time 543
