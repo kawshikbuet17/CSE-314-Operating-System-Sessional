@@ -111,18 +111,19 @@ void * SpecialKiosk(void * arg){
 		specialPassenger.pop();
 		sleep(w);
 		pthread_t thread;
-		pthread_create(&thread, NULL, ResendPassenger,(void*)a);
+		pthread_create(&thread, NULL, VIPLeftRight,(void*)a);
 	}
 	pthread_mutex_unlock(&mtxSpecialKiosk);
 }
 
 
-void * VIPRightLeft(void * arg){
+void * BoardingProduceThread(void * arg){
 	sem_wait(&boardingVipFull);
 	pthread_mutex_lock(&mtxVip);
 	if(!returnPassenger.empty()){
 		int item = returnPassenger.front();
 		returnPassenger.pop();
+		specialPassenger.push(item);
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->num = item;
 		pthread_t thread;
@@ -136,6 +137,9 @@ void * BoardingProduce(void * arg){
 	int item = ((struct args*)arg)->num;
 	pthread_mutex_lock(&mtxVip);
 	returnPassenger.push(item);
+	struct args* a = (struct args *)malloc(sizeof(struct args));
+	pthread_t thread;
+	pthread_create(&thread, NULL, BoardingProduceThread,(void*)a);
 	pthread_mutex_unlock(&mtxVip);
 	sem_post(&boardingVipFull);
 }
@@ -207,7 +211,7 @@ void * BoardingFunc(void * arg){
 		if(!boardingQueue.empty()){
 			int item = boardingQueue.front();
 			boardingQueue.pop();
-			if(item%5==0){
+			if(GetTime()%5==0){
 				cout<<"Passenger "<<item<<" [Lost] at time "<<GetTime()<<endl;
 				struct args* a = (struct args *)malloc(sizeof(struct args));
 				a->name="No";
