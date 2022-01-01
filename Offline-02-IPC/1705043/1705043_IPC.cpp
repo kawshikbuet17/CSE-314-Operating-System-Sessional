@@ -15,6 +15,7 @@ clock_t time_req;
 struct args {
     char* name;
     int num;
+	int belt;
 };
 
 struct timespec start, finish;
@@ -238,7 +239,9 @@ void * Transfer_VIP_Passenger_From_Left(void * arg){
 
 void * SecurityProduce(void * arg){
 	int item = ((struct args*)arg)->num;
+	int belt = ((struct args*)arg)->belt;
 	sleep(x);
+	sem_post(&securityBeltEmpty[belt]);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
 	
@@ -253,18 +256,16 @@ void * SecurityFunc(void * arg){
 	while(true){
 		sem_wait(&securityBeltFull[num]);
 		pthread_mutex_lock(&mtxKioskSecurity);
-		if(!securityQueue[num].empty()){
-			int item = securityQueue[num].front();
-			securityQueue[num].pop();
-			cout<<"Passenger "<<item<<" has started waiting for security check in belt "<<num<<endl;
-			struct args* a = (struct args *)malloc(sizeof(struct args));
-			a->name="SecurityProduce";
-			a->num=item;
-			pthread_t thread;
-			pthread_create(&thread, NULL, SecurityProduce,(void*)a);
-		}
+		int item = securityQueue[num].front();
+		securityQueue[num].pop();
+		cout<<"Passenger "<<item<<" has started waiting for security check in belt "<<num<<" at time "<<GetTime()<<endl;
+		struct args* a = (struct args *)malloc(sizeof(struct args));
+		a->name="SecurityProduce";
+		a->num=item;
+		a->belt=num;
+		pthread_t thread;
+		pthread_create(&thread, NULL, SecurityProduce,(void*)a);
 		pthread_mutex_unlock(&mtxKioskSecurity);
-		sem_post(&securityBeltEmpty[num]);
 	}
 }
 

@@ -11,147 +11,147 @@ Passenger 5 has arrived at airport at time 5
 Passenger 6 has arrived at airport at time 6
 Passenger 7 has arrived at airport at time 7
 Passenger 8 has arrived at airport at time 8
-Passenger 9 has arrived at airport at time 9
 Passenger 1 has finished check in at time 9
+Passenger 1 has started waiting for security check in belt 2 at time9
 Passenger 4 has started self check at kiosk 1 at time 9
-Passenger 1 has started waiting for security check in belt 1
+Passenger 9 has arrived at airport at time 9
 Passenger 2 has finished check in at time 10
+Passenger 2 has started waiting for security check in belt 0 at time10
 Passenger 5 has started self check at kiosk 2 at time 10
-Passenger 2 has started waiting for security check in belt 2
 Passenger 10 has arrived at airport at time 10
-Passenger 3 has finished check in at time 11
-Passenger 3 has started waiting for security check in belt 0
-Passenger 6 has started self check at kiosk 3 at time 11
 Passenger 11 has arrived at airport at time 11
+Passenger 3 has finished check in at time 11
+Passenger 6 has started self check at kiosk 3 at time 11
+Passenger 3 has started waiting for security check in belt 1 at time11
 Passenger 12 has arrived at airport at time 12
 Passenger 13 has arrived at airport at time 13
 Passenger 14 has arrived at airport at time 14
 Passenger 15 has arrived at airport at time 15
 Passenger 16 has arrived at airport at time 16
-Passenger 17 has arrived at airport at time 17
 Passenger 4 has sent VIP Tunnel at time 17
 Passenger 7 has started self check at kiosk 1 at time 17
+Passenger 17 has arrived at airport at time 17
 Passenger 5 has finished check in at time 18
 Passenger 8 has started self check at kiosk 2 at time 18
-Passenger 5 has started waiting for security check in belt 0
+Passenger 5 has started waiting for security check in belt 0 at time18
 Passenger 18 has arrived at airport at time 18
-Passenger 6 has finished check in at time 19
-Passenger 6 has started waiting for security check in belt 2
-Passenger 9 has started self check at kiosk 3 at time 19
-Passenger 19 has arrived at airport at time 19
 Passenger 1 has crossed the security check at time 19
 Passenger 1 has started waiting to be boarded at time 19
+Passenger 6 has finished check in at time 19
+Passenger 6 has started waiting for security check in belt 2 at time19
+Passenger 9 has started self check at kiosk 3 at time 19
+Passenger 19 has arrived at airport at time 19
 Passenger 20 has arrived at airport at time 20
 Passenger 7 has finished check in at time 25
-Passenger 7 has started waiting for security check in belt 2
 Passenger 10 has started self check at kiosk 1 at time 25
+Passenger 7 has started waiting for security check in belt 0 at time25
 Passenger 8 has sent VIP Tunnel at time 26
 Passenger 11 has started self check at kiosk 2 at time 26
 Passenger 9 has finished check in at time 27
-Passenger 9 has started waiting for security check in belt 1
 Passenger 12 has started self check at kiosk 3 at time 27
+Passenger 9 has started waiting for security check in belt 2 at time27
 Passenger 1  has boarded the plane at time 31
 Passenger 2 has crossed the security check at time 31
 Passenger 3 has crossed the security check at time 31
 Passenger 5 has crossed the security check at time 31
 Passenger 6 has crossed the security check at time 31
-Passenger 4 crossed VIP Tunnel at time 31
 Passenger 2 has started waiting to be boarded at time 31
 Passenger 10 has finished check in at time 33
+Passenger 10 has started waiting for security check in belt 1 at time33
 Passenger 13 has started self check at kiosk 1 at time 33
-Passenger 10 has started waiting for security check in belt 0
 Passenger 11 has finished check in at time 34
-Passenger 11 has started waiting for security check in belt 0
+Passenger 11 has started waiting for security check in belt 1 at time34
 Passenger 14 has started self check at kiosk 2 at time 34
 Passenger 12 has sent VIP Tunnel at time 35
 Passenger 15 has started self check at kiosk 3 at time 35
 Passenger 13 has finished check in at time 41
+Passenger 13 has started waiting for security check in belt 1 at time41
 Passenger 16 has started self check at kiosk 1 at time 41
-Passenger 13 has started waiting for security check in belt 1
 Passenger 14 has finished check in at time 42
 Passenger 17 has started self check at kiosk 2 at time 42
-Passenger 14 has started waiting for security check in belt 2
-Passenger 15 has finished check in at time 43
-Passenger 15 has started waiting for security check in belt 0
-Passenger 18 has started self check at kiosk 3 at time 43
+Passenger 14 has started waiting for security check in belt 0 at time42
 Passenger 2  has boarded the plane at time 43
 Passenger 3 has started waiting to be boarded at time 43
+Passenger 15 has finished check in at time 43
+Passenger 18 has started self check at kiosk 3 at time 43
+Passenger 15 has started waiting for security check in belt 1 at time43
 Passenger 16 has sent VIP Tunnel at time 49
 Passenger 19 has started self check at kiosk 1 at time 49
 Passenger 17 has finished check in at time 50
-Passenger 17 has started waiting for security check in belt 0
 Passenger 20 has started self check at kiosk 2 at time 50
+Passenger 17 has started waiting for security check in belt 0 at time50
 Passenger 18 has finished check in at time 51
-Passenger 18 has started waiting for security check in belt 2
+Passenger 18 has started waiting for security check in belt 0 at time51
 Passenger 3  has boarded the plane at time 55
 Passenger 5 [Lost] at time 55
 Passenger 19 has finished check in at time 57
-Passenger 19 has started waiting for security check in belt 2
+Passenger 19 has started waiting for security check in belt 2 at time57
 Passenger 20 has sent VIP Tunnel at time 58
 Passenger 6 has started waiting to be boarded at time 67
 Passenger 6  has boarded the plane at time 79
-Passenger 4 has started waiting to be boarded at time 79
+Passenger 8 crossed VIP Tunnel at time 79
+Passenger 4 crossed VIP Tunnel at time 79
+Passenger 10 has crossed the security check at time 79
+Passenger 11 has crossed the security check at time 79
+Passenger 12 crossed VIP Tunnel at time 79
+Passenger 13 has crossed the security check at time 79
+Passenger 14 has crossed the security check at time 79
+Passenger 15 has crossed the security check at time 79
+Passenger 7 has crossed the security check at time 79
+Passenger 17 has crossed the security check at time 79
+Passenger 18 has crossed the security check at time 79
+Passenger 16 crossed VIP Tunnel at time 79
+Passenger 9 has crossed the security check at time 79
+Passenger 19 has crossed the security check at time 79
+Passenger 20 crossed VIP Tunnel at time 79
+Passenger 8 has started waiting to be boarded at time 79
 Passenger 5 sent to Special Kiosk at time 81
 Passenger 5 has finished check [Special] in at time 89
-Passenger 4  has boarded the plane at time 91
-Passenger 7 has crossed the security check at time 91
-Passenger 11 has crossed the security check at time 91
-Passenger 7 has started waiting to be boarded at time 91
-Passenger 7  has boarded the plane at time 103
-Passenger 11 has started waiting to be boarded at time 103
-Passenger 11  has boarded the plane at time 115
-Passenger 14 has crossed the security check at time 115
-Passenger 14 [Lost] at time 115
-Passenger 9 has crossed the security check at time 127
-Passenger 17 has crossed the security check at time 127
-Passenger 9 has started waiting to be boarded at time 127
-Passenger 9  has boarded the plane at time 139
-Passenger 17 has started waiting to be boarded at time 139
-Passenger 14 sent to Special Kiosk at time 141
-Passenger 14 has finished check [Special] in at time 149
-Passenger 17  has boarded the plane at time 151
-Passenger 19 has crossed the security check at time 151
-Passenger 8 crossed VIP Tunnel at time 151
-Passenger 20 crossed VIP Tunnel at time 151
-Passenger 10 has crossed the security check at time 151
-Passenger 12 crossed VIP Tunnel at time 151
-Passenger 19 has started waiting to be boarded at time 151
-Passenger 19  has boarded the plane at time 163
-Passenger 8 has started waiting to be boarded at time 163
-Passenger 8  has boarded the plane at time 175
-Passenger 20 [Lost] at time 175
-Passenger 10 has started waiting to be boarded at time 187
-Passenger 10  has boarded the plane at time 199
-Passenger 12 has started waiting to be boarded at time 199
-Passenger 20 sent to Special Kiosk at time 201
-Passenger 20 has finished check [Special] in at time 209
-Passenger 12  has boarded the plane at time 211
-Passenger 13 has crossed the security check at time 211
-Passenger 14 crossed VIP Tunnel at time 211
-Passenger 5 crossed VIP Tunnel at time 211
-Passenger 15 has crossed the security check at time 211
-Passenger 18 has crossed the security check at time 211
-Passenger 16 crossed VIP Tunnel at time 211
-Passenger 13 has started waiting to be boarded at time 211
-Passenger 13  has boarded the plane at time 223
-Passenger 14 has started waiting to be boarded at time 223
-Passenger 14  has boarded the plane at time 235
-Passenger 5 [Lost] at time 235
-Passenger 15 has started waiting to be boarded at time 247
-Passenger 15  has boarded the plane at time 259
-Passenger 18 has started waiting to be boarded at time 259
-Passenger 5 sent to Special Kiosk at time 261
-Passenger 5 has finished check [Special] in at time 269
-Passenger 18  has boarded the plane at time 271
-Passenger 16 has started waiting to be boarded at time 271
-Passenger 16  has boarded the plane at time 283
-Passenger 20 crossed VIP Tunnel at time 283
-Passenger 20 has started waiting to be boarded at time 283
-Passenger 20  has boarded the plane at time 295
-Passenger 5 crossed VIP Tunnel at time 295
-Passenger 5 [Lost] at time 295
-Passenger 5 sent to Special Kiosk at time 321
-Passenger 5 has finished check [Special] in at time 329
-Passenger 5 crossed VIP Tunnel at time 343
-Passenger 5 has started waiting to be boarded at time 343
-Passenger 5  has boarded the plane at time 355
+Passenger 8  has boarded the plane at time 91
+Passenger 4 has started waiting to be boarded at time 91
+Passenger 4  has boarded the plane at time 103
+Passenger 10 has started waiting to be boarded at time 103
+Passenger 10  has boarded the plane at time 115
+Passenger 11 [Lost] at time 115
+Passenger 12 has started waiting to be boarded at time 127
+Passenger 12  has boarded the plane at time 139
+Passenger 13 has started waiting to be boarded at time 139
+Passenger 11 sent to Special Kiosk at time 141
+Passenger 11 has finished check [Special] in at time 149
+Passenger 13  has boarded the plane at time 151
+Passenger 14 has started waiting to be boarded at time 151
+Passenger 14  has boarded the plane at time 163
+Passenger 15 has started waiting to be boarded at time 163
+Passenger 15  has boarded the plane at time 175
+Passenger 7 [Lost] at time 175
+Passenger 17 has started waiting to be boarded at time 187
+Passenger 17  has boarded the plane at time 199
+Passenger 18 has started waiting to be boarded at time 199
+Passenger 7 sent to Special Kiosk at time 201
+Passenger 7 has finished check [Special] in at time 209
+Passenger 18  has boarded the plane at time 211
+Passenger 16 has started waiting to be boarded at time 211
+Passenger 16  has boarded the plane at time 223
+Passenger 9 has started waiting to be boarded at time 223
+Passenger 9  has boarded the plane at time 235
+Passenger 19 [Lost] at time 235
+Passenger 20 has started waiting to be boarded at time 247
+Passenger 20  has boarded the plane at time 259
+Passenger 7 crossed VIP Tunnel at time 259
+Passenger 11 crossed VIP Tunnel at time 259
+Passenger 7 has started waiting to be boarded at time 259
+Passenger 19 sent to Special Kiosk at time 261
+Passenger 19 has finished check [Special] in at time 269
+Passenger 7  has boarded the plane at time 271
+Passenger 11 has started waiting to be boarded at time 271
+Passenger 11  has boarded the plane at time 283
+Passenger 5 crossed VIP Tunnel at time 283
+Passenger 19 crossed VIP Tunnel at time 283
+Passenger 5 has started waiting to be boarded at time 283
+Passenger 5  has boarded the plane at time 295
+Passenger 19 [Lost] at time 295
+Passenger 19 sent to Special Kiosk at time 321
+Passenger 19 has finished check [Special] in at time 329
+Passenger 19 crossed VIP Tunnel at time 343
+Passenger 19 has started waiting to be boarded at time 343
+Passenger 19  has boarded the plane at time 355
