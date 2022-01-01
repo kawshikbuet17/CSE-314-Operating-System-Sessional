@@ -50,8 +50,11 @@ pthread_mutex_t mtxSpecialKiosk;
 pthread_mutex_t mtxKioskSecurity;
 pthread_mutex_t mtxEntryKiosk;
 pthread_mutex_t mtxSecurityBoarding;
+
 map<int, int> mp;
 
+
+pthread_mutex_t mtx_print;
 
 
 int GetTime(){
@@ -82,7 +85,9 @@ void * GeneratePassenger(void * arg){
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->num=i;
 		mp[i]=(i%4==0);
+		pthread_mutex_lock(&mtx_print);
 		cout<<"Passenger "<<i<<" has arrived at airport at time "<<GetTime()<<endl;
+		pthread_mutex_unlock(&mtx_print);
 		pthread_t thread;
 		pthread_create(&thread, NULL, EnterPassenger, (void*)a);
 	}
@@ -101,7 +106,9 @@ void * KioskProduce(void * arg){
 	pthread_mutex_lock(&mtxKioskSecurity);
 	
 	securityQueue[r].push(item);
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has finished check in at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 
 	
 
@@ -109,18 +116,34 @@ void * KioskProduce(void * arg){
 	sem_post(&securityBeltFull[r]);
 }
 
+pthread_mutex_t mtx_vip_db;
+pthread_mutex_t mtx_db;
+pthread_mutex_t mtx_rc;
+int rc = 0;
+
 void * SpecialSendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(w);
 	// sem_post(&specialKioskEmpty);
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
-
+	pthread_mutex_unlock(&mtx_print);
 	sleep(z);
+	pthread_mutex_lock(&mtx_rc);
+	rc = rc + 1;
+	if(rc==1)
+		pthread_mutex_lock(&mtx_db);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
+	rc = rc - 1;
+	if(rc==0)
+		pthread_mutex_unlock(&mtx_db);
+	pthread_mutex_unlock(&mtx_rc);
 }
 
 void * SpecialKiosk(void * arg){
@@ -133,8 +156,9 @@ void * SpecialKiosk(void * arg){
 
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->num=item;
-
+		pthread_mutex_lock(&mtx_print);
 		cout<<"Passenger "<<item<<" has finished check [Special] in at time "<<GetTime()<<endl;
+		pthread_mutex_unlock(&mtx_print);
 		pthread_t thread;
 		pthread_create(&thread, NULL, SpecialSendToVipChannel,(void*)a);
 		pthread_mutex_unlock(&mtxSpecialKiosk);
@@ -142,22 +166,32 @@ void * SpecialKiosk(void * arg){
 	}
 }
 
-pthread_mutex_t mtx_vip_db;
-pthread_mutex_t read;
-pthread_mutex_t write;
+
 
 void * SendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(w);
 	sem_post(&kioskEmpty);
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
-
+	pthread_mutex_unlock(&mtx_print);
+	
 	sleep(z);
+	pthread_mutex_lock(&mtx_rc);
+	rc = rc + 1;
+	if(rc==1)
+		pthread_mutex_lock(&mtx_db);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
+	rc = rc - 1;
+	if(rc==0)
+		pthread_mutex_unlock(&mtx_db);
+	pthread_mutex_unlock(&mtx_rc);
 }
 
 void * KioskFunc(void * arg){
@@ -170,7 +204,9 @@ void * KioskFunc(void * arg){
 		int val = kioskNumber.front();
 		kioskNumber.pop();
 		// sem_getvalue(&kioskEmpty, &val);
+		pthread_mutex_lock(&mtx_print);
 		cout<<"Passenger "<<item<<" has started self check at kiosk "<<val<<" at time "<<GetTime()<<endl;
+		pthread_mutex_unlock(&mtx_print);
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->name="KioskProduce";
 		a->num=item;
@@ -197,11 +233,15 @@ void * SendRightToLeft(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(z);
 	// sem_wait(&specialKioskEmpty);
+	pthread_mutex_lock(&mtx_db);
 	pthread_mutex_lock(&mtxSpecialKiosk);
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" sent to Special Kiosk at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 	specialPassenger.push(item);
 	pthread_mutex_unlock(&mtxSpecialKiosk);
 	sem_post(&specialKioskFull);
+	pthread_mutex_unlock(&mtx_db);
 }
 
 void * Transfer_VIP_Passenger_From_Right(void * arg){
@@ -267,8 +307,9 @@ void * SecurityProduce(void * arg){
 	sem_post(&securityBeltEmpty[belt]);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
-	
+	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has crossed the security check at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
 }
@@ -281,7 +322,9 @@ void * SecurityFunc(void * arg){
 		pthread_mutex_lock(&mtxKioskSecurity);
 		int item = securityQueue[num].front();
 		securityQueue[num].pop();
+		pthread_mutex_lock(&mtx_print);
 		cout<<"Passenger "<<item<<" has started waiting for security check in belt "<<num<<" at time "<<GetTime()<<endl;
+		pthread_mutex_unlock(&mtx_print);
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->name="SecurityProduce";
 		a->num=item;
@@ -304,14 +347,20 @@ void * BoardingFunc(void * arg){
 		a->num=item;
 		
 		if(GetTime()%5==0){
+			pthread_mutex_lock(&mtx_print);
 			cout<<"Passenger "<<item<<" [Lost] at time "<<GetTime()<<endl;
+			pthread_mutex_unlock(&mtx_print);
 			pthread_t thread;
 			pthread_create(&thread, NULL, SendRightToLeft,(void*)a);
 
 		}else{
+			pthread_mutex_lock(&mtx_print);
 			cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
+			pthread_mutex_unlock(&mtx_print);
 			sleep(y);
+			pthread_mutex_lock(&mtx_print);
 			cout<<"Passenger "<<item<<"  has boarded the plane at time "<<GetTime()<<endl;
+			pthread_mutex_unlock(&mtx_print);
 		}
 		
 	}
@@ -361,6 +410,9 @@ int main(void)
 	sem_init(&boardingVipFull,0,0);
 
 
+	pthread_mutex_init(&mtx_print, NULL);
+	pthread_mutex_init(&mtx_rc, NULL);
+	pthread_mutex_init(&mtx_db, NULL);
 	pthread_mutex_init(&mtx_return_db, NULL);
 	pthread_mutex_init(&mtx_vip_db, NULL);
 	pthread_mutex_init(&mtx_transfer, NULL);
