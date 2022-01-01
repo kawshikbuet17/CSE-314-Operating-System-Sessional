@@ -25,8 +25,6 @@ double elapsed;
 queue<int> passenger;
 queue<int>* securityQueue;
 queue<int> boardingQueue;
-queue<int> vipPassenger;
-queue<int> returnPassenger;
 queue<int> specialPassenger;
 
 queue<int> kioskNumber;
@@ -45,7 +43,6 @@ sem_t boardingVipEmpty;
 
 //mutex
 pthread_mutex_t boardingMtx;
-pthread_mutex_t mtxVip;
 pthread_mutex_t mtxSpecialKiosk;
 pthread_mutex_t mtxKioskSecurity;
 pthread_mutex_t mtxEntryKiosk;
@@ -116,7 +113,6 @@ void * KioskProduce(void * arg){
 	sem_post(&securityBeltFull[r]);
 }
 
-pthread_mutex_t mtx_vip_db;
 pthread_mutex_t mtx_db;
 pthread_mutex_t mtx_rc;
 int rc = 0;
@@ -225,10 +221,6 @@ void * KioskFunc(void * arg){
 }
 
 
-
-pthread_mutex_t mtx_transfer;
-pthread_mutex_t mtx_return_db;
-
 void * SendRightToLeft(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(z);
@@ -244,25 +236,6 @@ void * SendRightToLeft(void * arg){
 	pthread_mutex_unlock(&mtx_db);
 }
 
-void * Transfer_VIP_Passenger_From_Right(void * arg){
-	while(true){
-		
-		// pthread_mutex_lock(&mtx_transfer);
-		pthread_mutex_lock(&mtx_return_db);
-		while(!returnPassenger.empty()){
-			int item = returnPassenger.front();
-			returnPassenger.pop();
-
-			struct args* a = (struct args *)malloc(sizeof(struct args));
-			a->num=item;
-
-			pthread_t thread;
-			pthread_create(&thread, NULL, SendRightToLeft, (void*)a);
-		}
-		pthread_mutex_unlock(&mtx_return_db);
-		// pthread_mutex_unlock(&mtx_transfer);
-	}
-}
 
 void * SendLeftToRight(void * arg){
 	int item = ((struct args*)arg)->num;
@@ -273,31 +246,6 @@ void * SendLeftToRight(void * arg){
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
 }
-
-void * Transfer_VIP_Passenger_From_Left(void * arg){
-
-	while(true){
-		// pthread_mutex_lock(&mtx_transfer);
-		
-		pthread_mutex_lock(&mtx_vip_db);
-		while(!vipPassenger.empty()){
-			int item = vipPassenger.front();
-			vipPassenger.pop();
-
-			struct args* a = (struct args *)malloc(sizeof(struct args));
-			a->num=item;
-
-			pthread_t thread;
-			pthread_create(&thread, NULL, SendLeftToRight, (void*)a);
-		}
-		pthread_mutex_unlock(&mtx_vip_db);
-		
-		
-		// pthread_mutex_unlock(&mtx_transfer);
-	}
-}
-
-
 
 
 void * SecurityProduce(void * arg){
@@ -398,6 +346,7 @@ int main(void)
 	pthread_t thread1;
 	pthread_t thread2;
 	pthread_t thread3;
+	pthread_t thread4;
 
 	char* message = "Nothing";
 	
@@ -413,27 +362,17 @@ int main(void)
 	pthread_mutex_init(&mtx_print, NULL);
 	pthread_mutex_init(&mtx_rc, NULL);
 	pthread_mutex_init(&mtx_db, NULL);
-	pthread_mutex_init(&mtx_return_db, NULL);
-	pthread_mutex_init(&mtx_vip_db, NULL);
-	pthread_mutex_init(&mtx_transfer, NULL);
 	pthread_mutex_init(&mtxEntryKiosk,NULL);
 	pthread_mutex_init(&mtxKioskSecurity,NULL);
 	pthread_mutex_init(&mtxSecurityBoarding,NULL);
-	pthread_mutex_init(&mtxVip,NULL);
 	pthread_mutex_init(&mtxSpecialKiosk,NULL);
 
-	pthread_create(&thread3, NULL, GeneratePassenger,(void*)message);
-	pthread_create(&thread1, NULL, KioskFunc,(void*)message);
+	pthread_create(&thread1, NULL, GeneratePassenger,(void*)message);
+	pthread_create(&thread2, NULL, KioskFunc,(void*)message);
 	initializeSecurityElements();
-	pthread_create(&thread2, NULL, BoardingFunc,(void*)message);
-	pthread_t thread4;
-	// pthread_create(&thread4, NULL, Transfer_VIP_Passenger_From_Left,(void*)message);
-	pthread_t thread5;
-	// pthread_create(&thread5, NULL, Transfer_VIP_Passenger_From_Right, (void*)message);
+	pthread_create(&thread3, NULL, BoardingFunc,(void*)message);
+	pthread_create(&thread4, NULL, SpecialKiosk, (void*)message);
 
-	pthread_t thread6;
-	pthread_create(&thread6, NULL, SpecialKiosk, (void*)message);
-	//while(1);
 	pthread_exit(NULL);
 	return 0;
 }
