@@ -28,6 +28,8 @@ queue<int> vipPassenger;
 queue<int> returnPassenger;
 queue<int> specialPassenger;
 
+queue<int> kioskNumber;
+
 //semaphore
 sem_t kioskEmpty;
 sem_t kioskFull;
@@ -60,31 +62,48 @@ int GetTime(){
 }
 
 void * EnterPassenger(void * arg){
+	int item = ((struct args*)arg)->num;
+	sem_wait(&kioskEmpty);	
+	pthread_mutex_lock(&mtxEntryKiosk);
+	passenger.push(item);
+	pthread_mutex_unlock(&mtxEntryKiosk);
+	sem_post(&kioskFull);
+}
+
+
+void * GeneratePassenger(void * arg){
 	default_random_engine generator;
 	poisson_distribution<int> distribution(3);
-
 	for(int i=1; i<=20; i++){
-		sem_wait(&kioskEmpty);
 		int number = distribution(generator);
-		sleep(number%10);
-		pthread_mutex_lock(&mtxEntryKiosk);
-		passenger.push(i);
+		// sleep(number%10);
+		sleep(1);
+		struct args* a = (struct args *)malloc(sizeof(struct args));
+		a->num=i;
 		mp[i]=(i%4==0);
 		cout<<"Passenger "<<i<<" has arrived at airport at time "<<GetTime()<<endl;
-		pthread_mutex_unlock(&mtxEntryKiosk);
-
-		sem_post(&kioskFull);
+		pthread_t thread;
+		pthread_create(&thread, NULL, EnterPassenger, (void*)a);
 	}
 }
+
 
 void * KioskProduce(void * arg){
 	int item = ((struct args*)arg)->num;
 	int r = rand()%M;
-	sem_wait(&securityBeltEmpty[r]);
+
 	sleep(w);
+	sem_post(&kioskEmpty);
+
+	sem_wait(&securityBeltEmpty[r]);
+	
 	pthread_mutex_lock(&mtxKioskSecurity);
+	
 	securityQueue[r].push(item);
 	cout<<"Passenger "<<item<<" has finished check in at time "<<GetTime()<<endl;
+
+	
+
 	pthread_mutex_unlock(&mtxKioskSecurity);
 	sem_post(&securityBeltFull[r]);
 }
@@ -110,6 +129,7 @@ pthread_mutex_t mtx_vip_db;
 void * SendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(w);
+	sem_post(&kioskEmpty);
 	pthread_mutex_lock(&mtx_vip_db);
 	vipPassenger.push(item);
 	cout<<"Passenger "<<item<<" has sent VIP Tunnel at time "<<GetTime()<<endl;
@@ -120,26 +140,27 @@ void * KioskFunc(void * arg){
 	while(true){
 		sem_wait(&kioskFull);
 		pthread_mutex_lock(&mtxEntryKiosk);
-		if(!passenger.empty()){
-			int item = passenger.front();
-			passenger.pop();
-			int val;
-			sem_getvalue(&kioskFull, &val);
-			cout<<"Passenger "<<item<<" has started self check at kiosk "<<val<<" at time "<<GetTime()<<endl;
-			struct args* a = (struct args *)malloc(sizeof(struct args));
-			a->name="KioskProduce";
-			a->num=item;
-			if(mp[item]==1){
-				pthread_t thread;
-				pthread_create(&thread, NULL, SendToVipChannel, (void*)a);
-			}
-			else{
-				pthread_t thread;
-				pthread_create(&thread, NULL, KioskProduce,(void*)a);
-			}
-		}
+		int item = passenger.front();
+		passenger.pop();
 		pthread_mutex_unlock(&mtxEntryKiosk);
-		sem_post(&kioskEmpty);
+		int val = kioskNumber.front();
+		kioskNumber.pop();
+		// sem_getvalue(&kioskEmpty, &val);
+		cout<<"Passenger "<<item<<" has started self check at kiosk "<<val<<" at time "<<GetTime()<<endl;
+		struct args* a = (struct args *)malloc(sizeof(struct args));
+		a->name="KioskProduce";
+		a->num=item;
+		
+		
+		if(mp[item]==1){
+			pthread_t thread;
+			pthread_create(&thread, NULL, SendToVipChannel, (void*)a);
+		}
+		else{
+			pthread_t thread;
+			pthread_create(&thread, NULL, KioskProduce,(void*)a);
+		}
+		kioskNumber.push(val);
 	}
 }
 
@@ -293,9 +314,14 @@ int main(void)
 	time_req = clock();
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	srand(time(0));
-	// FileIO;
+	FileIO;
 	cin>>M>>N>>P>>w>>x>>y>>z;
 	cout<<M<<" "<<N<<" "<<P<<" "<<"\n"<<w<<" "<<x<<" "<<y<<" "<<z<<endl;
+	
+	for(int i=1; i<=M; i++){
+		kioskNumber.push(i);
+	}
+
 	pthread_t thread1;
 	pthread_t thread2;
 	pthread_t thread3;
@@ -320,7 +346,7 @@ int main(void)
 	pthread_mutex_init(&mtxVip,NULL);
 	pthread_mutex_init(&mtxSpecialKiosk,NULL);
 
-	pthread_create(&thread3, NULL, EnterPassenger,(void*)message);
+	pthread_create(&thread3, NULL, GeneratePassenger,(void*)message);
 	pthread_create(&thread1, NULL, KioskFunc,(void*)message);
 	initializeSecurityElements();
 	pthread_create(&thread2, NULL, BoardingFunc,(void*)message);
