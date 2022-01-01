@@ -17,6 +17,9 @@ struct args {
     int num;
 };
 
+struct timespec start, finish;
+double elapsed;
+
 //queue
 queue<int> passenger;
 queue<int>* securityQueue;
@@ -49,7 +52,11 @@ map<int, int> mp;
 
 
 int GetTime(){
-	return (int)(clock()-time_req)/CLOCKS_PER_SEC;
+	clock_gettime(CLOCK_MONOTONIC, &finish);
+	elapsed = (finish.tv_sec - start.tv_sec);
+	elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+	return (int)elapsed;
+	// return (int)(clock()-time_req)/CLOCKS_PER_SEC;
 }
 
 void * EnterPassenger(void * arg){
@@ -85,11 +92,11 @@ void * KioskProduce(void * arg){
 void * SpecialKiosk(void * arg){
 	while(true){
 		sem_wait(&specialKioskFull);
+		sleep(w);
 		pthread_mutex_lock(&mtxSpecialKiosk);
 		if(!specialPassenger.empty()){
 			int item = specialPassenger.front();
 			specialPassenger.pop();
-			sleep(w);
 			cout<<"Passenger "<<item<<" has finished check [Special] in at time "<<GetTime()<<endl;
 			vipPassenger.push(item);
 		}
@@ -98,6 +105,16 @@ void * SpecialKiosk(void * arg){
 	}
 }
 
+pthread_mutex_t mtx_vip_db;
+
+void * SendToVipChannel(void * arg){
+	int item = ((struct args*)arg)->num;
+	sleep(w);
+	pthread_mutex_lock(&mtx_vip_db);
+	vipPassenger.push(item);
+	cout<<"Passenger "<<item<<" has sent VIP Tunnel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_vip_db);
+}
 
 void * KioskFunc(void * arg){
 	while(true){
@@ -113,8 +130,8 @@ void * KioskFunc(void * arg){
 			a->name="KioskProduce";
 			a->num=item;
 			if(mp[item]==1){
-				cout<<"Passenger "<<item<<" has sent VIP Tunnel at time "<<GetTime()<<endl;
-				vipPassenger.push(item);
+				pthread_t thread;
+				pthread_create(&thread, NULL, SendToVipChannel, (void*)a);
 			}
 			else{
 				pthread_t thread;
@@ -126,44 +143,76 @@ void * KioskFunc(void * arg){
 	}
 }
 
-pthread_mutex_t mtx_transfer;
 
+
+pthread_mutex_t mtx_transfer;
+pthread_mutex_t mtx_return_db;
+
+void * SendRightToLeft(void * arg){
+	int item = ((struct args*)arg)->num;
+	sleep(z);
+	sem_wait(&specialKioskEmpty);
+	pthread_mutex_lock(&mtxSpecialKiosk);
+	cout<<"Passenger "<<item<<" sent to Special Kiosk at time "<<GetTime()<<endl;
+	specialPassenger.push(item);
+	pthread_mutex_unlock(&mtxSpecialKiosk);
+	sem_post(&specialKioskFull);
+}
 
 void * Transfer_VIP_Passenger_From_Right(void * arg){
 	while(true){
-		sleep(z);
+		
 		// pthread_mutex_lock(&mtx_transfer);
-		sem_wait(&specialKioskEmpty);
-		pthread_mutex_lock(&mtxSpecialKiosk);
+		pthread_mutex_lock(&mtx_return_db);
 		while(!returnPassenger.empty()){
 			int item = returnPassenger.front();
 			returnPassenger.pop();
-			cout<<"Passenger "<<item<<" sent to Special Kiosk at time "<<GetTime()<<endl;
-			specialPassenger.push(item);
+
+			struct args* a = (struct args *)malloc(sizeof(struct args));
+			a->num=item;
+
+			pthread_t thread;
+			pthread_create(&thread, NULL, SendRightToLeft, (void*)a);
 		}
-		pthread_mutex_unlock(&mtxSpecialKiosk);
-		sem_post(&specialKioskFull);
+		pthread_mutex_unlock(&mtx_return_db);
 		// pthread_mutex_unlock(&mtx_transfer);
 	}
+}
+
+void * SendLeftToRight(void * arg){
+	int item = ((struct args*)arg)->num;
+	sleep(z);
+	pthread_mutex_lock(&mtxSecurityBoarding);
+	cout<<"Passenger "<<item<<" crossed VIP Tunnel at time "<<GetTime()<<endl;
+	boardingQueue.push(item);
+	pthread_mutex_unlock(&mtxSecurityBoarding);
+	sem_post(&boardingFull);
 }
 
 void * Transfer_VIP_Passenger_From_Left(void * arg){
 
 	while(true){
-		sleep(z);
 		// pthread_mutex_lock(&mtx_transfer);
-		pthread_mutex_lock(&mtxSecurityBoarding);
+		
+		pthread_mutex_lock(&mtx_vip_db);
 		while(!vipPassenger.empty()){
 			int item = vipPassenger.front();
 			vipPassenger.pop();
-			cout<<"Passenger "<<item<<" crossed VIP Tunnel at time "<<GetTime()<<endl;
-			boardingQueue.push(item);
+
+			struct args* a = (struct args *)malloc(sizeof(struct args));
+			a->num=item;
+
+			pthread_t thread;
+			pthread_create(&thread, NULL, SendLeftToRight, (void*)a);
 		}
-		pthread_mutex_unlock(&mtxSecurityBoarding);
-		sem_post(&boardingFull);
+		pthread_mutex_unlock(&mtx_vip_db);
+		
+		
 		// pthread_mutex_unlock(&mtx_transfer);
 	}
 }
+
+
 
 
 void * SecurityProduce(void * arg){
@@ -198,6 +247,8 @@ void * SecurityFunc(void * arg){
 	}
 }
 
+
+
 void * BoardingFunc(void * arg){
 	while(true){
 		sem_wait(&boardingFull);
@@ -207,7 +258,10 @@ void * BoardingFunc(void * arg){
 			boardingQueue.pop();
 			if(GetTime()%5==0){
 				cout<<"Passenger "<<item<<" [Lost] at time "<<GetTime()<<endl;
+				sleep(y);
+				pthread_mutex_lock(&mtx_return_db);
 				returnPassenger.push(item);
+				pthread_mutex_unlock(&mtx_return_db);
 			}else{
 				cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
 				sleep(y);
@@ -237,8 +291,9 @@ void initializeSecurityElements(){
 int main(void)
 {
 	time_req = clock();
+	clock_gettime(CLOCK_MONOTONIC, &start);
 	srand(time(0));
-	FileIO;
+	// FileIO;
 	cin>>M>>N>>P>>w>>x>>y>>z;
 	cout<<M<<" "<<N<<" "<<P<<" "<<"\n"<<w<<" "<<x<<" "<<y<<" "<<z<<endl;
 	pthread_t thread1;
@@ -255,6 +310,9 @@ int main(void)
 	sem_init(&specialKioskFull,0,0);
 	sem_init(&boardingVipFull,0,0);
 
+
+	pthread_mutex_init(&mtx_return_db, NULL);
+	pthread_mutex_init(&mtx_vip_db, NULL);
 	pthread_mutex_init(&mtx_transfer, NULL);
 	pthread_mutex_init(&mtxEntryKiosk,NULL);
 	pthread_mutex_init(&mtxKioskSecurity,NULL);
@@ -273,7 +331,7 @@ int main(void)
 
 	pthread_t thread6;
 	pthread_create(&thread6, NULL, SpecialKiosk, (void*)message);
-	while(1);
+	//while(1);
 	pthread_exit(NULL);
 	return 0;
 }
