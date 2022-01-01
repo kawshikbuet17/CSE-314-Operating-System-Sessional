@@ -109,32 +109,55 @@ void * KioskProduce(void * arg){
 	sem_post(&securityBeltFull[r]);
 }
 
+void * SpecialSendToVipChannel(void * arg){
+	int item = ((struct args*)arg)->num;
+	sleep(w);
+	// sem_post(&specialKioskEmpty);
+	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
+
+	sleep(z);
+	pthread_mutex_lock(&mtxSecurityBoarding);
+	boardingQueue.push(item);
+	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtxSecurityBoarding);
+	sem_post(&boardingFull);
+}
+
 void * SpecialKiosk(void * arg){
 	while(true){
 		sem_wait(&specialKioskFull);
 		sleep(w);
 		pthread_mutex_lock(&mtxSpecialKiosk);
-		if(!specialPassenger.empty()){
-			int item = specialPassenger.front();
-			specialPassenger.pop();
-			cout<<"Passenger "<<item<<" has finished check [Special] in at time "<<GetTime()<<endl;
-			vipPassenger.push(item);
-		}
+		int item = specialPassenger.front();
+		specialPassenger.pop();
+
+		struct args* a = (struct args *)malloc(sizeof(struct args));
+		a->num=item;
+
+		cout<<"Passenger "<<item<<" has finished check [Special] in at time "<<GetTime()<<endl;
+		pthread_t thread;
+		pthread_create(&thread, NULL, SpecialSendToVipChannel,(void*)a);
 		pthread_mutex_unlock(&mtxSpecialKiosk);
-		sem_post(&specialKioskEmpty);
+		
 	}
 }
 
 pthread_mutex_t mtx_vip_db;
+pthread_mutex_t read;
+pthread_mutex_t write;
 
 void * SendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(w);
 	sem_post(&kioskEmpty);
-	pthread_mutex_lock(&mtx_vip_db);
-	vipPassenger.push(item);
-	cout<<"Passenger "<<item<<" has sent VIP Tunnel at time "<<GetTime()<<endl;
-	pthread_mutex_unlock(&mtx_vip_db);
+	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
+
+	sleep(z);
+	pthread_mutex_lock(&mtxSecurityBoarding);
+	boardingQueue.push(item);
+	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtxSecurityBoarding);
+	sem_post(&boardingFull);
 }
 
 void * KioskFunc(void * arg){
@@ -173,7 +196,7 @@ pthread_mutex_t mtx_return_db;
 void * SendRightToLeft(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(z);
-	sem_wait(&specialKioskEmpty);
+	// sem_wait(&specialKioskEmpty);
 	pthread_mutex_lock(&mtxSpecialKiosk);
 	cout<<"Passenger "<<item<<" sent to Special Kiosk at time "<<GetTime()<<endl;
 	specialPassenger.push(item);
@@ -270,27 +293,27 @@ void * SecurityFunc(void * arg){
 }
 
 
-
 void * BoardingFunc(void * arg){
 	while(true){
 		sem_wait(&boardingFull);
 		pthread_mutex_lock(&mtxSecurityBoarding);
-		if(!boardingQueue.empty()){
-			int item = boardingQueue.front();
-			boardingQueue.pop();
-			if(GetTime()%5==0){
-				cout<<"Passenger "<<item<<" [Lost] at time "<<GetTime()<<endl;
-				sleep(y);
-				pthread_mutex_lock(&mtx_return_db);
-				returnPassenger.push(item);
-				pthread_mutex_unlock(&mtx_return_db);
-			}else{
-				cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
-				sleep(y);
-				cout<<"Passenger "<<item<<"  has boarded the plane at time "<<GetTime()<<endl;
-			}
-		}
+		int item = boardingQueue.front();
+		boardingQueue.pop();
 		pthread_mutex_unlock(&mtxSecurityBoarding);
+		struct args* a = (struct args *)malloc(sizeof(struct args));
+		a->num=item;
+		
+		if(GetTime()%5==0){
+			cout<<"Passenger "<<item<<" [Lost] at time "<<GetTime()<<endl;
+			pthread_t thread;
+			pthread_create(&thread, NULL, SendRightToLeft,(void*)a);
+
+		}else{
+			cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
+			sleep(y);
+			cout<<"Passenger "<<item<<"  has boarded the plane at time "<<GetTime()<<endl;
+		}
+		
 	}
 }
 
@@ -352,9 +375,9 @@ int main(void)
 	initializeSecurityElements();
 	pthread_create(&thread2, NULL, BoardingFunc,(void*)message);
 	pthread_t thread4;
-	pthread_create(&thread4, NULL, Transfer_VIP_Passenger_From_Left,(void*)message);
+	// pthread_create(&thread4, NULL, Transfer_VIP_Passenger_From_Left,(void*)message);
 	pthread_t thread5;
-	pthread_create(&thread5, NULL, Transfer_VIP_Passenger_From_Right, (void*)message);
+	// pthread_create(&thread5, NULL, Transfer_VIP_Passenger_From_Right, (void*)message);
 
 	pthread_t thread6;
 	pthread_create(&thread6, NULL, SpecialKiosk, (void*)message);
