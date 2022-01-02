@@ -115,10 +115,27 @@ void * KioskProduce(void * arg){
 	pthread_mutex_unlock(&mtxKioskSecurity);
 	sem_post(&securityBeltFull[r]);
 }
-
+pthread_mutex_t mtx_extradb;
 pthread_mutex_t mtx_db;
 pthread_mutex_t mtx_rc;
 int rc = 0;
+
+void * SpecialSendToVipChannelThread(void * arg){
+	int item = ((struct args*)arg)->num;
+	sleep(z);
+	pthread_mutex_lock(&mtxSecurityBoarding);
+	boardingQueue.push(item);
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
+	pthread_mutex_unlock(&mtxSecurityBoarding);
+	sem_post(&boardingFull);
+	pthread_mutex_lock(&mtx_rc);
+	rc = rc - 1;
+	if(rc==0)
+		pthread_mutex_unlock(&mtx_db);
+	pthread_mutex_unlock(&mtx_rc);
+}
 
 void * SpecialSendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
@@ -132,17 +149,10 @@ void * SpecialSendToVipChannel(void * arg){
 	rc = rc + 1;
 	if(rc==1)
 		pthread_mutex_lock(&mtx_db);
-	pthread_mutex_lock(&mtxSecurityBoarding);
-	boardingQueue.push(item);
-	pthread_mutex_lock(&mtx_print);
-	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
-	pthread_mutex_unlock(&mtx_print);
-	pthread_mutex_unlock(&mtxSecurityBoarding);
-	sem_post(&boardingFull);
-	rc = rc - 1;
-	if(rc==0)
-		pthread_mutex_unlock(&mtx_db);
 	pthread_mutex_unlock(&mtx_rc);
+
+	pthread_t thread;
+	pthread_create(&thread, NULL, SpecialSendToVipChannelThread,(void*)arg);
 }
 
 void * SpecialKiosk(void * arg){
@@ -178,8 +188,11 @@ void * SendToVipChannelThread(void * arg){
 
 	pthread_mutex_lock(&mtx_rc);
 	rc = rc - 1;
-	if(rc==0)
+	if(rc==0){
 		pthread_mutex_unlock(&mtx_db);
+		// cout<<"MTX_DB UNLOCK "<<GetTime()<<endl;
+	}
+		
 	pthread_mutex_unlock(&mtx_rc);
 	
 }
@@ -194,8 +207,11 @@ void * SendToVipChannel(void * arg){
 
 	pthread_mutex_lock(&mtx_rc);
 	rc = rc + 1;
-	if(rc==1)
+	if(rc==1){
 		pthread_mutex_lock(&mtx_db);
+		// cout<<"MTX_DB LOCK "<<GetTime()<<endl;
+	}
+		
 	pthread_mutex_unlock(&mtx_rc);
 
 	pthread_t thread;
@@ -233,6 +249,9 @@ void * KioskFunc(void * arg){
 	}
 }
 
+int wc = 0;
+pthread_mutex_t mtx_wc;
+
 void * SendRightToLeftThread(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(z);
@@ -243,15 +262,28 @@ void * SendRightToLeftThread(void * arg){
 	specialPassenger.push(item);
 	pthread_mutex_unlock(&mtxSpecialKiosk);
 	sem_post(&specialKioskFull);
+	// cout<<"MTX UNLOCK R "<<GetTime()<<endl;
+	pthread_mutex_lock(&mtx_wc);
+	wc = wc - 1;
+	if(wc==0){
+		pthread_mutex_unlock(&mtx_db);
+	}
+	pthread_mutex_unlock(&mtx_wc);
 }
 
 
 void * SendRightToLeft(void * arg){
 	// sem_wait(&specialKioskEmpty);
-	pthread_mutex_lock(&mtx_db);
+	pthread_mutex_lock(&mtx_wc);
+	wc = wc + 1;
+	if(wc==1){
+		pthread_mutex_lock(&mtx_db);
+	}
+	pthread_mutex_unlock(&mtx_wc);
+	// cout<<"MTX LOCK R "<<GetTime()<<endl;
 	pthread_t thread;
 	pthread_create(&thread, NULL, SendRightToLeftThread, (void*)arg);
-	pthread_mutex_unlock(&mtx_db);
+	
 }
 
 
@@ -379,7 +411,9 @@ int main(void)
 
 	pthread_mutex_init(&mtx_print, NULL);
 	pthread_mutex_init(&mtx_rc, NULL);
+	pthread_mutex_init(&mtx_wc, NULL);
 	pthread_mutex_init(&mtx_db, NULL);
+	pthread_mutex_init(&mtx_extradb, NULL);
 	pthread_mutex_init(&mtxEntryKiosk,NULL);
 	pthread_mutex_init(&mtxKioskSecurity,NULL);
 	pthread_mutex_init(&mtxSecurityBoarding,NULL);
