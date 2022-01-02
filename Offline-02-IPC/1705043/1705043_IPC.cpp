@@ -9,7 +9,7 @@ using namespace std;
 #define FileIO \
     freopen("input.txt", "r", stdin); \
     freopen("output.txt", "w", stdout);
-
+#define TO_BE_BOARDED 20
 int M,N,P,w,x,y,z;
 clock_t time_req;
 struct args {
@@ -75,7 +75,7 @@ void * EnterPassenger(void * arg){
 void * GeneratePassenger(void * arg){
 	default_random_engine generator;
 	poisson_distribution<int> distribution(3);
-	for(int i=1; i<=20; i++){
+	for(int i=1; i<=TO_BE_BOARDED; i++){
 		int number = distribution(generator);
 		// sleep(number%10);
 		sleep(1);
@@ -132,23 +132,25 @@ void * SpecialSendToVipChannelThread(void * arg){
 	sem_post(&boardingFull);
 	pthread_mutex_lock(&mtx_rc);
 	rc = rc - 1;
-	if(rc==0)
+	if(rc==0){
+		pthread_mutex_unlock(&mtx_extradb);
 		pthread_mutex_unlock(&mtx_db);
+	}
+		
 	pthread_mutex_unlock(&mtx_rc);
 }
 
 void * SpecialSendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
-	sleep(w);
-	// sem_post(&specialKioskEmpty);
-	pthread_mutex_lock(&mtx_print);
-	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
 	sleep(z);
 	pthread_mutex_lock(&mtx_rc);
 	rc = rc + 1;
-	if(rc==1)
+	if(rc==1){
 		pthread_mutex_lock(&mtx_db);
+		pthread_mutex_lock(&mtx_extradb);
+	}
+		
 	pthread_mutex_unlock(&mtx_rc);
 
 	pthread_t thread;
@@ -172,12 +174,23 @@ void * SpecialKiosk(void * arg){
 		pthread_create(&thread, NULL, SpecialSendToVipChannel,(void*)a);
 		pthread_mutex_unlock(&mtxSpecialKiosk);
 		
+		
 	}
 }
 
 void * SendToVipChannelThread(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(z);
+	
+
+	pthread_mutex_lock(&mtx_rc);
+	rc = rc - 1;
+	if(rc==0){
+		pthread_mutex_unlock(&mtx_extradb);
+		pthread_mutex_unlock(&mtx_db);
+		// cout<<"MTX_DB UNLOCK "<<GetTime()<<endl;
+	}
+	pthread_mutex_unlock(&mtx_rc);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
 	pthread_mutex_lock(&mtx_print);
@@ -186,15 +199,6 @@ void * SendToVipChannelThread(void * arg){
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
 
-	pthread_mutex_lock(&mtx_rc);
-	rc = rc - 1;
-	if(rc==0){
-		pthread_mutex_unlock(&mtx_db);
-		// cout<<"MTX_DB UNLOCK "<<GetTime()<<endl;
-	}
-		
-	pthread_mutex_unlock(&mtx_rc);
-	
 }
 
 void * SendToVipChannel(void * arg){
@@ -209,6 +213,7 @@ void * SendToVipChannel(void * arg){
 	rc = rc + 1;
 	if(rc==1){
 		pthread_mutex_lock(&mtx_db);
+		pthread_mutex_lock(&mtx_extradb);
 		// cout<<"MTX_DB LOCK "<<GetTime()<<endl;
 	}
 		
@@ -266,7 +271,7 @@ void * SendRightToLeftThread(void * arg){
 	pthread_mutex_lock(&mtx_wc);
 	wc = wc - 1;
 	if(wc==0){
-		pthread_mutex_unlock(&mtx_db);
+		pthread_mutex_unlock(&mtx_extradb);
 	}
 	pthread_mutex_unlock(&mtx_wc);
 }
@@ -276,10 +281,14 @@ void * SendRightToLeft(void * arg){
 	// sem_wait(&specialKioskEmpty);
 	pthread_mutex_lock(&mtx_wc);
 	wc = wc + 1;
+	pthread_mutex_lock(&mtx_db);
 	if(wc==1){
-		pthread_mutex_lock(&mtx_db);
+		pthread_mutex_lock(&mtx_extradb);
+		
 	}
+	pthread_mutex_unlock(&mtx_db);
 	pthread_mutex_unlock(&mtx_wc);
+	
 	// cout<<"MTX LOCK R "<<GetTime()<<endl;
 	pthread_t thread;
 	pthread_create(&thread, NULL, SendRightToLeftThread, (void*)arg);
@@ -385,9 +394,9 @@ int main(void)
 	time_req = clock();
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	srand(time(0));
-	FileIO;
+	// FileIO;
 	cin>>M>>N>>P>>w>>x>>y>>z;
-	cout<<M<<" "<<N<<" "<<P<<" "<<"\n"<<w<<" "<<x<<" "<<y<<" "<<z<<endl;
+	cout<<M<<" "<<N<<" "<<P<<" "<<endl<<w<<" "<<x<<" "<<y<<" "<<z<<endl;
 	
 	for(int i=1; i<=M; i++){
 		kioskNumber.push(i);
