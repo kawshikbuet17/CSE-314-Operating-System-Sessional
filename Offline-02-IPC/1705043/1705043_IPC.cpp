@@ -6,11 +6,11 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define FileIO \
-    freopen("input.txt", "r", stdin); \
-    freopen("output.txt", "w", stdout);
+
 #define TO_BE_BOARDED 20
 int M,N,P,w,x,y,z;
+int boarderCnt=0;
+
 clock_t time_req;
 struct args {
     char* name;
@@ -159,6 +159,7 @@ void * SpecialSendToVipChannel(void * arg){
 
 void * SpecialKiosk(void * arg){
 	while(true){
+        if(boarderCnt==TO_BE_BOARDED)break;
 		sem_wait(&specialKioskFull);
 		sleep(w);
 		pthread_mutex_lock(&mtxSpecialKiosk);
@@ -226,6 +227,7 @@ void * SendToVipChannel(void * arg){
 
 void * KioskFunc(void * arg){
 	while(true){
+        if(boarderCnt==TO_BE_BOARDED)break;
 		sem_wait(&kioskFull);
 		pthread_mutex_lock(&mtxEntryKiosk);
 		int item = passenger.front();
@@ -325,6 +327,7 @@ void * SecurityFunc(void * arg){
 	string name = ((struct args*)arg)->name;
 	int num = ((struct args*)arg)->num;
 	while(true){
+        if(boarderCnt==TO_BE_BOARDED)break;
 		sem_wait(&securityBeltFull[num]);
 		pthread_mutex_lock(&mtxKioskSecurity);
 		int item = securityQueue[num].front();
@@ -345,6 +348,7 @@ void * SecurityFunc(void * arg){
 
 void * BoardingFunc(void * arg){
 	while(true){
+        if(boarderCnt==TO_BE_BOARDED)break;
 		sem_wait(&boardingFull);
 		pthread_mutex_lock(&mtxSecurityBoarding);
 		int item = boardingQueue.front();
@@ -368,6 +372,7 @@ void * BoardingFunc(void * arg){
 			pthread_mutex_lock(&mtx_print);
 			cout<<"Passenger "<<item<<"  has boarded the plane at time "<<GetTime()<<endl;
 			pthread_mutex_unlock(&mtx_print);
+            boarderCnt++;
 		}
 		
 	}
@@ -394,7 +399,8 @@ int main(void)
 	time_req = clock();
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	srand(time(0));
-	// FileIO;
+// 	freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
 	cin>>M>>N>>P>>w>>x>>y>>z;
 	cout<<M<<" "<<N<<" "<<P<<" "<<endl<<w<<" "<<x<<" "<<y<<" "<<z<<endl;
 	
