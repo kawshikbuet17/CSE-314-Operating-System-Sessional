@@ -93,22 +93,25 @@ void * GeneratePassenger(void * arg){
 
 void * KioskProduce(void * arg){
 	int item = ((struct args*)arg)->num;
-	int r = rand()%M;
+	int r = rand()%N;
 
 	sleep(w);
+	
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has finished check in at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 	sem_post(&kioskEmpty);
+
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has started waiting for security check in belt "<<r+1<<" from time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
 
 	sem_wait(&securityBeltEmpty[r]);
 	
 	pthread_mutex_lock(&mtxKioskSecurity);
 	
 	securityQueue[r].push(item);
-	pthread_mutex_lock(&mtx_print);
-	cout<<"Passenger "<<item<<" has finished check in at time "<<GetTime()<<endl;
-	pthread_mutex_unlock(&mtx_print);
-
 	
-
 	pthread_mutex_unlock(&mtxKioskSecurity);
 	sem_post(&securityBeltFull[r]);
 }
@@ -271,7 +274,7 @@ void * SecurityFunc(void * arg){
 		int item = securityQueue[num].front();
 		securityQueue[num].pop();
 		pthread_mutex_lock(&mtx_print);
-		cout<<"Passenger "<<item<<" has started waiting for security check in belt "<<num<<" at time "<<GetTime()<<endl;
+		cout<<"Passenger "<<item<<" has started the security check at time "<<GetTime()<<endl;
 		pthread_mutex_unlock(&mtx_print);
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->name="SecurityProduce";
@@ -319,7 +322,7 @@ void initializeSecurityElements(){
 	securityBeltFull = new sem_t[M];
 	securityQueue = new queue<int>[M];
 
-	for(int i=0; i<M; i++){
+	for(int i=0; i<N; i++){
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		pthread_t thread;
 		a->name = "Security";
