@@ -165,7 +165,24 @@ void * SpecialKiosk(void * arg){
 	}
 }
 
+void * SendToVipChannelThread(void * arg){
+	int item = ((struct args*)arg)->num;
+	sleep(z);
+	pthread_mutex_lock(&mtxSecurityBoarding);
+	boardingQueue.push(item);
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
+	pthread_mutex_unlock(&mtxSecurityBoarding);
+	sem_post(&boardingFull);
 
+	pthread_mutex_lock(&mtx_rc);
+	rc = rc - 1;
+	if(rc==0)
+		pthread_mutex_unlock(&mtx_db);
+	pthread_mutex_unlock(&mtx_rc);
+	
+}
 
 void * SendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
@@ -174,23 +191,16 @@ void * SendToVipChannel(void * arg){
 	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
-	
-	sleep(z);
+
 	pthread_mutex_lock(&mtx_rc);
 	rc = rc + 1;
 	if(rc==1)
 		pthread_mutex_lock(&mtx_db);
-	pthread_mutex_lock(&mtxSecurityBoarding);
-	boardingQueue.push(item);
-	pthread_mutex_lock(&mtx_print);
-	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
-	pthread_mutex_unlock(&mtx_print);
-	pthread_mutex_unlock(&mtxSecurityBoarding);
-	sem_post(&boardingFull);
-	rc = rc - 1;
-	if(rc==0)
-		pthread_mutex_unlock(&mtx_db);
 	pthread_mutex_unlock(&mtx_rc);
+
+	pthread_t thread;
+	pthread_create(&thread, NULL, SendToVipChannelThread, (void*)arg);
+	
 }
 
 void * KioskFunc(void * arg){
@@ -223,12 +233,9 @@ void * KioskFunc(void * arg){
 	}
 }
 
-
-void * SendRightToLeft(void * arg){
+void * SendRightToLeftThread(void * arg){
 	int item = ((struct args*)arg)->num;
 	sleep(z);
-	// sem_wait(&specialKioskEmpty);
-	pthread_mutex_lock(&mtx_db);
 	pthread_mutex_lock(&mtxSpecialKiosk);
 	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" sent to Special Kiosk at time "<<GetTime()<<endl;
@@ -236,6 +243,14 @@ void * SendRightToLeft(void * arg){
 	specialPassenger.push(item);
 	pthread_mutex_unlock(&mtxSpecialKiosk);
 	sem_post(&specialKioskFull);
+}
+
+
+void * SendRightToLeft(void * arg){
+	// sem_wait(&specialKioskEmpty);
+	pthread_mutex_lock(&mtx_db);
+	pthread_t thread;
+	pthread_create(&thread, NULL, SendRightToLeftThread, (void*)arg);
 	pthread_mutex_unlock(&mtx_db);
 }
 
