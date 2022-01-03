@@ -6,12 +6,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+#define FileIO \
+    freopen("input.txt", "r", stdin); \
+    freopen("output.txt", "w", stdout);
 
 #define TO_BE_BOARDED 20
+
 int M,N,P,w,x,y,z;
 int boarderCnt=0;
 
-clock_t time_req;
+
 struct args {
     char* name;
     int num;
@@ -59,7 +63,6 @@ int GetTime(){
 	elapsed = (finish.tv_sec - start.tv_sec);
 	elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
 	return (int)elapsed;
-	// return (int)(clock()-time_req)/CLOCKS_PER_SEC;
 }
 
 void * EnterPassenger(void * arg){
@@ -373,6 +376,9 @@ void * BoardingFunc(void * arg){
 			cout<<"Passenger "<<item<<"  has boarded the plane at time "<<GetTime()<<endl;
 			pthread_mutex_unlock(&mtx_print);
             boarderCnt++;
+			if(boarderCnt==TO_BE_BOARDED){
+				cout<<"ALL PASSENGERS BOARDED"<<endl;
+			}
 		}
 		
 	}
@@ -396,11 +402,9 @@ void initializeSecurityElements(){
 
 int main(void)
 {
-	time_req = clock();
 	clock_gettime(CLOCK_MONOTONIC, &start);
 	srand(time(0));
-// 	freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+	FileIO;
 	cin>>M>>N>>P>>w>>x>>y>>z;
 	cout<<M<<" "<<N<<" "<<P<<" "<<endl<<w<<" "<<x<<" "<<y<<" "<<z<<endl;
 	
