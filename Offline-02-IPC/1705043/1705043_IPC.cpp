@@ -145,8 +145,7 @@ void * SpecialSendToVipChannelThread(void * arg){
 
 void * SpecialSendToVipChannel(void * arg){
 	int item = ((struct args*)arg)->num;
-	pthread_mutex_unlock(&mtx_print);
-	sleep(z);
+
 	pthread_mutex_lock(&mtx_rc);
 	rc = rc + 1;
 	if(rc==1){
@@ -246,7 +245,7 @@ void * KioskFunc(void * arg){
 		a->name="KioskProduce";
 		a->num=item;
 		
-		
+		// if(1==1){
 		if(mp[item]==1){
 			pthread_t thread;
 			pthread_create(&thread, NULL, SendToVipChannel, (void*)a);
@@ -360,6 +359,7 @@ void * BoardingFunc(void * arg){
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->num=item;
 		
+		// if(1==1){
 		if(GetTime()%5==0){
 			pthread_mutex_lock(&mtx_print);
 			cout<<"Passenger "<<item<<" [Lost] at time "<<GetTime()<<endl;
