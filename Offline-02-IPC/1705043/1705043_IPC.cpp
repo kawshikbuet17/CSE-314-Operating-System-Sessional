@@ -86,7 +86,13 @@ void * GeneratePassenger(void * arg){
 		a->num=i;
 		mp[i]=(i%4==0);
 		pthread_mutex_lock(&mtx_print);
-		cout<<"Passenger "<<i<<" has arrived at airport at time "<<GetTime()<<endl;
+		if(mp[i]==1){
+			cout<<"Passenger "<<i<<" (VIP) has arrived at airport at time "<<GetTime()<<endl;
+		}
+		else{
+			cout<<"Passenger "<<i<<" has arrived at airport at time "<<GetTime()<<endl;
+		}
+		
 		pthread_mutex_unlock(&mtx_print);
 		pthread_t thread;
 		pthread_create(&thread, NULL, EnterPassenger, (void*)a);
@@ -162,22 +168,28 @@ void * SpecialSendToVipChannel(void * arg){
 void * SpecialKiosk(void * arg){
 	while(true){
         if(boarderCnt==TO_BE_BOARDED)break;
+
 		sem_wait(&specialKioskFull);
-		sleep(w);
 		pthread_mutex_lock(&mtxSpecialKiosk);
 		int item = specialPassenger.front();
 		specialPassenger.pop();
+		pthread_mutex_lock(&mtx_print);
+		cout<<"Passenger "<<item<<" has started self-check at kiosk (Special) at time "<<GetTime()<<endl;
+		pthread_mutex_unlock(&mtx_print);
+		pthread_mutex_unlock(&mtxSpecialKiosk);
+
+		sleep(w);
 
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->num=item;
+
 		pthread_mutex_lock(&mtx_print);
-		cout<<"Passenger "<<item<<" has finished check [Special] in at time "<<GetTime()<<endl;
+		cout<<"Passenger "<<item<<" has finished check (Special) in at time "<<GetTime()<<endl;
 		pthread_mutex_unlock(&mtx_print);
+
 		pthread_t thread;
 		pthread_create(&thread, NULL, SpecialSendToVipChannel,(void*)a);
-		pthread_mutex_unlock(&mtxSpecialKiosk);
-		
-		
+	
 	}
 }
 
@@ -209,7 +221,7 @@ void * SendToVipChannel(void * arg){
 	sleep(w);
 	sem_post(&kioskEmpty);
 	pthread_mutex_lock(&mtx_print);
-	cout<<"Passenger "<<item<<" [VIP] has finished check in at time "<<GetTime()<<endl;
+	cout<<"Passenger "<<item<<" has finished check in at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
 
 	pthread_mutex_lock(&mtx_rc);
@@ -239,7 +251,7 @@ void * KioskFunc(void * arg){
 		kioskNumber.pop();
 		// sem_getvalue(&kioskEmpty, &val);
 		pthread_mutex_lock(&mtx_print);
-		cout<<"Passenger "<<item<<" has started self check at kiosk "<<val<<" at time "<<GetTime()<<endl;
+		cout<<"Passenger "<<item<<" has started self-check at kiosk "<<val<<" at time "<<GetTime()<<endl;
 		pthread_mutex_unlock(&mtx_print);
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->name="KioskProduce";
