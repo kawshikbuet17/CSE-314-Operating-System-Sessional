@@ -80,8 +80,8 @@ void * GeneratePassenger(void * arg){
 	poisson_distribution<int> distribution(3);
 	for(int i=1; i<=TO_BE_BOARDED; i++){
 		int number = distribution(generator);
-		// sleep(number%10);
-		sleep(1);
+		sleep(number%10);
+		// sleep(1);
 		struct args* a = (struct args *)malloc(sizeof(struct args));
 		a->num=i;
 		mp[i]=(i%4==0);
