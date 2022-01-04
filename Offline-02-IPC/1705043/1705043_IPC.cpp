@@ -195,6 +195,11 @@ void * SpecialKiosk(void * arg){
 
 void * SendToVipChannelThread(void * arg){
 	int item = ((struct args*)arg)->num;
+	
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has started crossing VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
+	
 	sleep(z);
 	
 
@@ -210,6 +215,7 @@ void * SendToVipChannelThread(void * arg){
 	boardingQueue.push(item);
 	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has crossed the VIP Channel at time "<<GetTime()<<endl;
+	cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
@@ -275,9 +281,15 @@ pthread_mutex_t mtx_wc;
 
 void * SendRightToLeftThread(void * arg){
 	int item = ((struct args*)arg)->num;
+
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has started crossing VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
+
 	sleep(z);
 	pthread_mutex_lock(&mtxSpecialKiosk);
 	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has crossed VIP Channel at time "<<GetTime()<<endl;
 	cout<<"Passenger "<<item<<" sent to Special Kiosk at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
 	specialPassenger.push(item);
@@ -332,6 +344,7 @@ void * SecurityProduce(void * arg){
 	boardingQueue.push(item);
 	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has crossed the security check at time "<<GetTime()<<endl;
+	cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
 	pthread_mutex_unlock(&mtxSecurityBoarding);
 	sem_post(&boardingFull);
@@ -381,7 +394,7 @@ void * BoardingFunc(void * arg){
 
 		}else{
 			pthread_mutex_lock(&mtx_print);
-			cout<<"Passenger "<<item<<" has started waiting to be boarded at time "<<GetTime()<<endl;
+			cout<<"Passenger "<<item<<" has started boarding the plane at time "<<GetTime()<<endl;
 			pthread_mutex_unlock(&mtx_print);
 			sleep(y);
 			pthread_mutex_lock(&mtx_print);
