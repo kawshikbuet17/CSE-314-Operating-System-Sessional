@@ -131,6 +131,11 @@ int rc = 0;
 
 void * SpecialSendToVipChannelThread(void * arg){
 	int item = ((struct args*)arg)->num;
+
+	pthread_mutex_lock(&mtx_print);
+	cout<<"Passenger "<<item<<" has started crossing VIP Channel at time "<<GetTime()<<endl;
+	pthread_mutex_unlock(&mtx_print);
+	
 	sleep(z);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
@@ -307,15 +312,16 @@ void * SendRightToLeftThread(void * arg){
 
 void * SendRightToLeft(void * arg){
 	// sem_wait(&specialKioskEmpty);
+	
+	pthread_mutex_lock(&mtx_db);
 	pthread_mutex_lock(&mtx_wc);
 	wc = wc + 1;
-	pthread_mutex_lock(&mtx_db);
 	if(wc==1){
 		pthread_mutex_lock(&mtx_extradb);
 		
 	}
-	pthread_mutex_unlock(&mtx_db);
 	pthread_mutex_unlock(&mtx_wc);
+	pthread_mutex_unlock(&mtx_db);
 	
 	// cout<<"MTX LOCK R "<<GetTime()<<endl;
 	pthread_t thread;
