@@ -135,7 +135,7 @@ void * SpecialSendToVipChannelThread(void * arg){
 	pthread_mutex_lock(&mtx_print);
 	cout<<"Passenger "<<item<<" has started crossing VIP Channel at time "<<GetTime()<<endl;
 	pthread_mutex_unlock(&mtx_print);
-	
+
 	sleep(z);
 	pthread_mutex_lock(&mtxSecurityBoarding);
 	boardingQueue.push(item);
@@ -416,9 +416,9 @@ void * BoardingFunc(void * arg){
 }
 
 void initializeSecurityElements(){
-	securityBeltEmpty = new sem_t[M];
-	securityBeltFull = new sem_t[M];
-	securityQueue = new queue<int>[M];
+	securityBeltEmpty = new sem_t[N];
+	securityBeltFull = new sem_t[N];
+	securityQueue = new queue<int>[N];
 
 	for(int i=0; i<N; i++){
 		struct args* a = (struct args *)malloc(sizeof(struct args));
