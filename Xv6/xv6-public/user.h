@@ -1,4 +1,5 @@
 struct stat;
+struct mystat;
 struct rtcdate;
 
 // system calls
@@ -28,6 +29,7 @@ int kawshik(void);
 int paul(void);
 int readcount(void);
 int incrementnum(int);
+int addmultiplenum(struct mystat*);
 
 // ulib.c
 int stat(const char*, struct stat*);

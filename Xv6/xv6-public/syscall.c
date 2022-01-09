@@ -108,6 +108,7 @@ extern int sys_kawshik(void);
 extern int sys_paul(void);
 extern int sys_readcount(void);
 extern int sys_incrementnum(void);
+extern int sys_addmultiplenum(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -136,6 +137,7 @@ static int (*syscalls[])(void) = {
 [SYS_paul]    sys_paul,
 [SYS_readcount] sys_readcount,
 [SYS_incrementnum] sys_incrementnum,
+[SYS_addmultiplenum]  sys_addmultiplenum,
 };
 
 void

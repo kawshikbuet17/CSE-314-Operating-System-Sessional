@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "stat.h"
 
 int
 sys_fork(void)
@@ -73,6 +74,17 @@ int sys_incrementnum(void){
   int num;
   argint(0,&num);
   return num + 1;
+}
+
+int sys_addmultiplenum(void){
+  struct mystat *ct;
+  argptr (0 , (void*)&ct ,sizeof(*ct));
+  int s = 0;
+  int i;
+  for(i=0;i<ct->sz;i++){
+    s+=ct->nums[i];
+  }
+  return s; 
 }
 
 int
