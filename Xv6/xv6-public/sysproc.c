@@ -49,6 +49,27 @@ sys_getsize(void)
 }
 
 int
+sys_kawshik(void)
+{
+  return 1705043;
+}
+
+int
+sys_paul(void)
+{
+  int x = 1705043;
+  int m = 1705043;
+  int n = 500;
+  int a = 5;
+  int c = 11;
+
+  for(int i=0; i<n; i++){
+    x = (a*x+c)%m;
+  }
+  return x;
+}
+
+int
 sys_sbrk(void)
 {
   int addr;
