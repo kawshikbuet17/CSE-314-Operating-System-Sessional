@@ -69,6 +69,12 @@ sys_paul(void)
   return x;
 }
 
+int sys_incrementnum(void){
+  int num;
+  argint(0,&num);
+  return num + 1;
+}
+
 int
 sys_sbrk(void)
 {

@@ -27,6 +27,7 @@ int getsize(void);
 int kawshik(void);
 int paul(void);
 int readcount(void);
+int incrementnum(int);
 
 // ulib.c
 int stat(const char*, struct stat*);
