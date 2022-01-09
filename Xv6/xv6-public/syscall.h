@@ -23,3 +23,4 @@
 #define SYS_getsize 22
 #define SYS_kawshik 23
 #define SYS_paul    24
+#define SYS_readcount   25

@@ -26,6 +26,7 @@ int uptime(void);
 int getsize(void);
 int kawshik(void);
 int paul(void);
+int readcount(void);
 
 // ulib.c
 int stat(const char*, struct stat*);
