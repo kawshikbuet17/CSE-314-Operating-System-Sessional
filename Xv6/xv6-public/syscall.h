@@ -26,3 +26,4 @@
 #define SYS_readcount   25
 #define SYS_incrementnum 26
 #define SYS_addmultiplenum  27
+#define SYS_b1addition 28

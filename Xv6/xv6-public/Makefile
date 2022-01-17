@@ -187,6 +187,7 @@ UPROGS=\
 	_testa1\
 	_incrementnum\
 	_addmultiplenum\
+	_testb1\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -261,6 +262,7 @@ EXTRA=\
 	testa1.c\
 	incrementnum.c\
 	addmultiplenum.c\
+	testb1.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\

@@ -87,6 +87,15 @@ int sys_addmultiplenum(void){
   return s; 
 }
 
+int sys_b1addition(void)
+{
+  int num1, num2;
+  argint(0, &num1);
+  argint(1, &num2);
+  return num1+num2;
+}
+
+
 int
 sys_sbrk(void)
 {

@@ -30,6 +30,7 @@ int paul(void);
 int readcount(void);
 int incrementnum(int);
 int addmultiplenum(struct mystat*);
+int b1addition(int,int);
 
 // ulib.c
 int stat(const char*, struct stat*);
